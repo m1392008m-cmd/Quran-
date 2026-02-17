@@ -1,157 +1,178 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ديوان البطاقات الملكي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Reem+Kufi:wght@500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        :root {
-            --turq: #005f73;
-            --ruby: #9b2226;
-            --gold: #ae934d;
-            --parchment: #fdf5e6;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ديوان البطاقات الملكي المطور</title>
 
-        body {
-            background-color: #121212;
-            color: var(--gold);
-            font-family: 'Reem Kufi', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-        /* تصميم البطاقة العثمانية */
-        .card-box {
-            width: 380px;
-            height: 520px;
-            background: var(--parchment);
-            border: 12px solid var(--turq);
-            border-image: url('https://www.transparenttextures.com/patterns/arabesque.png') 30 stretch;
-            position: relative;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            box-shadow: 0 0 40px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-image: url('https://www.transparenttextures.com/patterns/shattered.png');
-        }
+<style>
+:root{
+    --main:#0f2027;
+    --grad:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    --gold:#d4af37;
+}
 
-        .card-box::before {
-            content: "⚜";
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-            font-size: 2rem; color: var(--gold);
-        }
+body{
+    background:var(--grad);
+    font-family:'Cairo',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+    color:white;
+}
 
-        #display-text {
-            font-family: 'Amiri', serif;
-            color: #1a1a1a;
-            font-size: 1.5rem;
-            line-height: 1.8;
-            text-align: center;
-            z-index: 2;
-        }
+/* البطاقة الجديدة */
+.card-box{
+    width:390px;
+    height:540px;
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 0 40px rgba(0,0,0,0.7);
+    background:url('https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800') center/cover;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:30px;
+}
 
-        /* الأزرار */
-        .grid-menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            width: 100%;
-            max-width: 380px;
-            margin-top: 25px;
-        }
+.card-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+}
 
-        button {
-            padding: 12px;
-            background: var(--turq);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            cursor: pointer;
-            font-family: 'Reem Kufi', sans-serif;
-            transition: 0.3s;
-        }
+#display-text{
+    position:relative;
+    z-index:2;
+    font-family:'Amiri',serif;
+    font-size:1.6rem;
+    line-height:1.9;
+    color:#fff;
+}
 
-        button:hover { background: var(--ruby); color: white; }
+.card-footer{
+    position:absolute;
+    bottom:15px;
+    font-size:0.8rem;
+    color:var(--gold);
+    z-index:2;
+}
 
-        .btn-main { grid-column: span 2; background: var(--ruby); color: white; font-weight: bold; }
+/* الأزرار */
+.buttons{
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    width:100%;
+    max-width:390px;
+}
 
-        #loader { font-size: 0.9rem; margin-top: 10px; color: var(--gold); height: 20px; }
-    </style>
+button{
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    font-size:1rem;
+    cursor:pointer;
+    background:#ffffff10;
+    color:white;
+    border:1px solid #ffffff30;
+    transition:0.3s;
+}
+
+button:hover{
+    background:var(--gold);
+    color:black;
+}
+
+.loader{
+    margin-top:10px;
+    height:20px;
+    font-size:0.9rem;
+    color:var(--gold);
+}
+</style>
 </head>
+
 <body>
 
-    <h1 style="font-family: 'Amiri';">مُولّد البطاقات الديواني</h1>
+<h2 style="font-family:'Amiri';color:var(--gold);">بطاقتك الإيمانية اليومية</h2>
 
-    <div class="card-box" id="myCard">
-        <div id="display-text">اختر باباً من أبواب الخير بالأسفل لسحب النص...</div>
-        <div style="position:absolute; bottom:15px; width:100%; text-align:center; font-size:0.7rem; color:var(--turq);">
-            روضة الذكر ونبض القرآن الكريم
-        </div>
-    </div>
+<div class="card-box" id="myCard">
+    <div class="card-overlay"></div>
+    <div id="display-text">اضغط على الزر لسحب نص عشوائي من كل الأبواب</div>
+    <div class="card-footer">روضة الذكر | نبض القرآن الكريم</div>
+</div>
 
-    <div id="loader"></div>
+<div class="loader" id="loader"></div>
 
-    <div class="grid-menu">
-        <button onclick="smartFetch('azkar.html')">باب الأذكار</button>
-        <button onclick="smartFetch('hadith.html')">باب الأحاديث</button>
-        <button onclick="smartFetch('duas.html')">باب الأدعية</button>
-        <button onclick="smartFetch('werd.html')">باب الورد</button>
-        <button class="btn-main" onclick="downloadImage()">تحميل البطاقة كصورة 📥</button>
-    </div>
+<div class="buttons">
+    <button onclick="fetchAllPages()">سحب بطاقة من جميع الأبواب ✨</button>
+    <button onclick="downloadImage()">تحميل البطاقة كصورة 📥</button>
+</div>
 
-    <script>
-        async function smartFetch(url) {
-            const loader = document.getElementById('loader');
-            const display = document.getElementById('display-text');
-            loader.innerText = "جاري البحث في الديوان...";
+<script>
 
-            try {
-                const response = await fetch(url);
-                const html = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+const pages = [
+    "azkar.html",
+    "hadith.html",
+    "duas.html",
+    "werd.html"
+];
 
-                // الكلمات المفتاحية لضمان سحب نصوص دينية وليس أزرار
-                const keywords = ['الله', 'اللهم', 'قال', 'رسول', 'سبحان', 'الحمد', 'آمنوا', 'يا رب'];
+async function fetchAllPages(){
+    const loader = document.getElementById("loader");
+    const display = document.getElementById("display-text");
+    loader.innerText="جاري البحث في جميع الأبواب...";
 
-                // البحث عن النصوص في الفقرات وصفوف القوائم
-                let rawElements = Array.from(doc.querySelectorAll('p, li, span, h3, div'));
-                let validTexts = rawElements
-                    .map(el => el.innerText.trim())
-                    .filter(t => {
-                        // شروط صارمة: طول مناسب + يحتوي على كلمات دينية + لا يحتوي على كلمات تقنية
-                        const isLongEnough = t.length > 30 && t.length < 300;
-                        const hasKeywords = keywords.some(k => t.includes(k));
-                        const isNotMenu = !t.includes('الرئيسية') && !t.includes('اتصل');
-                        return isLongEnough && hasKeywords && isNotMenu;
-                    });
+    try{
+        let allTexts=[];
 
-                if (validTexts.length > 0) {
-                    // اختيار نص عشوائي من النتائج المفلترة
-                    display.innerText = validTexts[Math.floor(Math.random() * validTexts.length)];
-                    loader.innerText = "تم استحضار النص بنجاح.";
-                } else {
-                    display.innerText = "تعذر العثور على نص مناسب في هذه الصفحة، تأكد من وجود نصوص مكتوبة.";
-                    loader.innerText = "";
+        for(const url of pages){
+            const response=await fetch(url);
+            const html=await response.text();
+            const parser=new DOMParser();
+            const doc=parser.parseFromString(html,"text/html");
+
+            let elements=Array.from(doc.querySelectorAll("p, li, span, h3, div"));
+            elements.forEach(el=>{
+                let text=el.innerText.trim();
+                if(text.length>40 && text.length<400){
+                    allTexts.push(text);
                 }
-            } catch (e) {
-                loader.innerText = "خطأ: تأكد من تشغيل الموقع عبر رابط GitHub.";
-            }
-        }
-
-        function downloadImage() {
-            html2canvas(document.getElementById('myCard'), { scale: 3 }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Islamic_Card.png';
-                link.href = canvas.toDataURL();
-                link.click();
             });
         }
-    </script>
+
+        if(allTexts.length>0){
+            display.innerText=allTexts[Math.floor(Math.random()*allTexts.length)];
+            loader.innerText="تم استحضار البطاقة بنجاح ✨";
+        }else{
+            display.innerText="لم يتم العثور على نصوص مناسبة.";
+            loader.innerText="";
+        }
+
+    }catch(e){
+        loader.innerText="تأكد أنك تفتح الموقع من GitHub وليس من ملف محلي.";
+    }
+}
+
+function downloadImage(){
+    html2canvas(document.getElementById("myCard"),{scale:3}).then(canvas=>{
+        const link=document.createElement("a");
+        link.download="Islamic_Card.png";
+        link.href=canvas.toDataURL();
+        link.click();
+    });
+}
+
+</script>
+
 </body>
 </html>
