@@ -1,6 +1,6 @@
 {
   "name": "روضة الذكر",
-  "short_name": "التطبيق الاسلامي",
+  "short_name": "التطبيق الإسلامي",
   "description": "موقع إسلامي شامل يعمل بدون إنترنت",
   "start_url": "./index.html",
   "display": "standalone",
@@ -14,8 +14,13 @@
       "purpose": "any maskable"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/192/2972/2972473.png",
+      "src": "https://cdn-icons-png.flaticon.com/192/192/2972/2972473.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2972/2972531.png",
+      "sizes": "144x144",
       "type": "image/png"
     }
   ]
