@@ -105,6 +105,35 @@
             color: var(--gold);
             font-size: 2rem;
         }
+     
+/* القائمة الجانبية (الأزرار) */
+nav {
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+nav a {
+    padding: 10px 25px;
+    background: white;
+    color: var(--main-blue);
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 17px;
+    transition: all 0.4s ease;
+}
+
+nav a:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+         }
     </style>
 </head>
 <body>
@@ -114,6 +143,16 @@
     <p>وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ</p>
 </header>
 
+<nav>
+    
+    <a href="hadith.html">📜 الأحاديث</a>
+    <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
+    <a href="azkar.html">📿 الأذكار</a>
+    <a href="asmaa.html">✨ أسماء الله</a>
+    <a href="sebha.html"> السبحه الالكترونيه </a> 
+    <a herf="cards.html"> اصنع صوره دينيه </a> 
+    <a href="werd.html">📖 الوِرد اليومي</a>
+</nav>
 <div class="container">
 
     <div class="dua-card">
