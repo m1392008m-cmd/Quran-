@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕌 مواقيت الصلاة - رمضان كريم</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+
+body {
+    margin:0; padding:0;
+    font-family: 'Amiri', serif;
+    background: linear-gradient(135deg,#f5f3ec,#eae2d6);
+    color:#333;
+}
+header {
+    text-align:center;
+    padding:30px 20px;
+    background: radial-gradient(circle at top, #ffecd2, #fcb69f);
+    color:#8b4513;
+    font-size:28px;
+    font-weight:bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.container {
+    max-width:700px;
+    margin:30px auto;
+    padding:20px;
+    background:rgba(255,255,255,0.95);
+    border-radius:25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.prayer-list div {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    margin:12px 0;
+    border-radius:15px;
+    background:linear-gradient(90deg,#fff8e1,#ffecb3);
+    border-left:5px solid #ffb74d;
+    font-size:20px;
+    font-weight:bold;
+}
+.prayer-list div span:first-child {
+    color:#8b4513;
+}
+.countdown {
+    text-align:center;
+    margin-top:25px;
+    font-size:22px;
+    font-weight:bold;
+    color:#d84315;
+}
+.moon-icon {
+    font-size:36px; margin-left:10px; color:#ffb300;
+}
+</style>
+</head>
+<body>
+
+<header>
+🕌 مواقيت الصلاة – رمضان كريم <span class="moon-icon">🌙</span>
+</header>
+
+<div class="container">
+    <div class="prayer-list" id="prayerList"></div>
+    <div class="countdown" id="nextPrayer"></div>
+</div>
+
+<script>
+const apiURL = "https://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&method=8";
+let prayerTimes = {};
+
+// جلب المواعيد
+fetch(apiURL)
+.then(res => res.json())
+.then(data => {
+    if(data.code===200){
+        prayerTimes = data.data.timings;
+        displayPrayerTimes(prayerTimes);
+        startCountdown(prayerTimes);
+    } else alert("لم يتم جلب أوقات الصلاة.");
+})
+.catch(err=>{
+    alert("خطأ في الاتصال بالبيانات.");
+    console.error(err);
+});
+
+// عرض الأوقات
+function displayPrayerTimes(times){
+    const container = document.getElementById('prayerList');
+    container.innerHTML = "";
+    const names = {
+        Fajr:"الفجر",
+        Sunrise:"الشروق",
+        Dhuhr:"الظهر",
+        Asr:"العصر",
+        Maghrib:"المغرب",
+        Isha:"العشاء"
+    };
+    for(let key in names){
+        const time = times[key];
+        const div = document.createElement('div');
+        div.innerHTML = `<span>${names[key]}</span><span>${time}</span>`;
+        container.appendChild(div);
+    }
+}
+
+// العد التنازلي للصلاة القادمة
+function startCountdown(times){
+    function update(){
+        const now = new Date();
+        const formatTime = t=>{
+            const [h,m] = t.split(":");
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(h), parseInt(m));
+        };
+
+        let nextTime=null, nextName="";
+        const order = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+        for(let key of order){
+            const prayerDate = formatTime(times[key]);
+            if(prayerDate>now){
+                nextTime=prayerDate;
+                nextName=key;
+                break;
+            }
+        }
+        if(!nextTime){
+            nextTime=formatTime(times["Fajr"]);
+            nextTime.setDate(nextTime.getDate()+1);
+            nextName="الفجر";
+        }
+
+        const diff=nextTime-now;
+        const hrs=Math.floor(diff/1000/60/60);
+        const mins=Math.floor((diff/1000/60)%60);
+        const secs=Math.floor((diff/1000)%60);
+
+        document.getElementById('nextPrayer').innerText =
+            `⏳ الصلاة القادمة (${nextName}): ${hrs}س ${mins}د ${secs}ث`;
+    }
+
+    update();
+    setInterval(update,1000);
+}
+
+    </script>
+
+    <footer> جميع الحقوق محفوظه mostafa abdel tawap  © 2026</footer>
+</body>
+</html>

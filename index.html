@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌙 روضة الذكر - نبض القرآن الكريم</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap');
+
+:root {
+    --main-blue: #1a3a5f;
+    --gold: #c5a059;
+    --light-gold: #f4e1bc;
+    --bg-white: #fdfbf7;
+    --text-gray: #444;
+}
+
+body {
+    margin:0; padding:0;
+    font-family: 'Amiri', serif;
+    background-color: var(--bg-color);
+    background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); /* زخرفة إسلامية خفيفة */
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    color: var(--text-gray);
+}
+
+/* الهيدر الاحترافي */
+header {
+    background: var(--main-blue);
+    color: var(--gold);
+    width: 100%;
+    text-align: center;
+    padding: 40px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-bottom: 4px solid var(--gold);
+}
+
+header h1 {
+    font-family: 'Aref Ruqaa', serif;
+    margin: 0;
+    font-size: 36px;
+    letter-spacing: 1px;
+}
+
+/* القائمة الجانبية (الأزرار) */
+nav {
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+nav a {
+    padding: 10px 25px;
+    background: white;
+    color: var(--main-blue);
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 17px;
+    transition: all 0.4s ease;
+}
+
+nav a:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+}
+
+/* منطقة المحتوى */
+main {
+    max-width: 900px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    text-align: center;
+    position: relative;
+}
+
+main::before {
+    content: "❁";
+    color: var(--gold);
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+main h2 {
+    font-family: 'Aref Ruqaa', serif;
+    font-size: 30px;
+    color: var(--main-blue);
+    margin-bottom: 20px;
+}
+
+main p {
+    font-size: 20px;
+    line-height: 2;
+    color: #555;
+}
+
+/* صورة جمالية */
+.hero-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 30px 0;
+    border-radius: 15px;
+    border: 5px double var(--gold);
+}
+
+/* الفوتر */
+footer {
+    margin-top: auto;
+    padding: 20px 0;
+    text-align: center;
+    background: var(--main-blue);
+    color: #ccc;
+    font-size: 14px;
+    border-top: 3px solid var(--gold);
+}
+
+footer strong {
+    color: var(--gold);
+}
+
+/* تحسين للجوال */
+@media (max-width: 600px) {
+    header h1 { font-size: 24px; }
+    main { padding: 20px; }
+    nav a { width: 40%; text-align: center; font-size: 14px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>《بوت》روضة الذكر ونبض القرأن الكريم ❤️</h1>
+</header>
+
+<nav>
+    <a href="duas.html">🤲 الأدعية</a>
+    <a href="hadith.html">📜 الأحاديث</a>
+    <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
+    <a href="azkar.html">📿 الأذكار</a>
+    <a href="asmaa.html">✨ أسماء الله</a>
+    <a href="werd.html">📖 الوِرد اليومي</a>
+</nav>
+
+<main>
+    <h2>أهلاً بك في رحاب الطاعة</h2>
+    <p>
+        مرحباً بك في موقعنا المتكامل لمتابعة الأوراد الرمضانية اليومية. 
+        هنا تجد ضالتك من أحاديث نبوية شريفة، أذكار، وأدعية تعينك على ذكر الله في شهر الخير.
+    </p>
+    
+    <img src="https://images.unsplash.com/photo-1564121211835-e88c852648ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="مسجد جمالي" class="hero-img">
+    
+    <p style="font-style: italic; color: #888;">"إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ كَانَتْ لَهُمْ جَنَّاتُ الْفِرْدَوْسِ نُزُلًا"</p>
+</main>
+
+<footer>
+    جميع الحقوق محفوظة © 2026 - صُمم بواسطة <strong>مصطفى عبد التواب</strong>
+</footer>
+
+</body>
+</html>
