@@ -161,63 +161,76 @@
     </main>
 
     <script>
-        let quranData = null;
+    let quranData = null;
 
-        async function init() {
-            try {
-                const res = await fetch('./quran.json');
-                const json = await res.json();
-                quranData = json.data ? json.data : json;
+    async function init() {
+        try {
+            // جلب ملف JSON
+            const res = await fetch('./quran.json');
+            if (!res.ok) throw new Error("فشل تحميل الملف");
+            const json = await res.json();
 
-                const list = document.getElementById('surahList');
-                quranData.surahs.forEach(surah => {
-                    const item = document.createElement('div');
-                    item.className = 'surah-item';
-                    item.id = `s${surah.number}`;
-                    item.innerHTML = `<span>${surah.number}. ${surah.name}</span> <small>${surah.ayahs.length} آية</small>`;
-                    item.onclick = () => loadSurah(surah.number);
-                    list.appendChild(item);
-                });
-            } catch (err) {
-                alert("تأكد من رفع ملفquran.json بجانب الصفحة");
-            }
-        }
+            // التحقق من شكل البيانات
+            quranData = json.data ? json.data : json;
 
-        function loadSurah(num) {
-            // إغلاق القائمة في الموبايل عند الاختيار
-            document.getElementById('sidebar').classList.remove('open');
-            
-            // تمييز السورة المختارة في الفهرس
-            document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`s${num}`).classList.add('active');
-
-            const content = document.getElementById('quranContent');
-            const surah = quranData.surahs.find(s => s.number == num);
-
-            let html = `<div class="surah-name-title">${surah.name}</div>`;
-            
-            if (num != 1 && num != 9) {
-                html += `<div style="text-align:center; margin-bottom:20px; font-size: 22px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+            if (!quranData.surahs || quranData.surahs.length === 0) {
+                throw new Error("ملف JSON لا يحتوي على سور");
             }
 
-            let text = "";
-            surah.ayahs.forEach(aya => {
-                let txt = aya.text;
-                if (num != 1 && aya.numberInSurah == 1) {
-                    txt = txt.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "");
-                }
-                text += `${txt} <span class="aya-num">${aya.numberInSurah}</span> `;
+            // إنشاء قائمة السور في الفهرس
+            const list = document.getElementById('surahList');
+            quranData.surahs.forEach(surah => {
+                const item = document.createElement('div');
+                item.className = 'surah-item';
+                item.id = `s${surah.number}`;
+                item.innerHTML = `<span>${surah.number}. ${surah.name}</span> <small>${surah.ayahs.length} آية</small>`;
+                item.addEventListener('click', () => loadSurah(surah.number));
+                list.appendChild(item);
             });
+        } catch (err) {
+            console.error(err);
+            alert("حدث خطأ أثناء تحميل السور: " + err.message);
+        }
+    }
 
-            content.innerHTML = html + text;
-            document.querySelector('main').scrollTop = 0;
+    function loadSurah(num) {
+        document.getElementById('sidebar').classList.remove('open'); // إغلاق الفهرس في الموبايل
+
+        // تمييز السورة المختارة
+        document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
+        const activeItem = document.getElementById(`s${num}`);
+        if (activeItem) activeItem.classList.add('active');
+
+        const content = document.getElementById('quranContent');
+        const surah = quranData.surahs.find(s => s.number == num);
+        if (!surah) return;
+
+        let html = `<div class="surah-name-title">${surah.name}</div>`;
+        
+        // إضافة البسملة ما عدا الفاتحة والتوبة
+        if (num != 1 && num != 9) {
+            html += `<div style="text-align:center; margin-bottom:20px; font-size: 22px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
+        // بناء نص السورة
+        let text = "";
+        surah.ayahs.forEach(aya => {
+            let txt = aya.text;
+            if (num != 1 && aya.numberInSurah == 1) {
+                txt = txt.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "");
+            }
+            text += `${txt} <span class="aya-num">${aya.numberInSurah}</span> `;
+        });
 
-        window.onload = init;
+        content.innerHTML = html + text;
+        document.querySelector('main').scrollTop = 0;
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
