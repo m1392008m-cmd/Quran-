@@ -1,0 +1,18 @@
+{
+  "name": "روضة الذكر ونبض القرآن",
+  "short_name": "روضة الذكر",
+  "description": "تطبيق إسلامي شامل يعمل بدون إنترنت",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#064e3b",
+  "theme_color": "#064e3b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2972/2972473.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
