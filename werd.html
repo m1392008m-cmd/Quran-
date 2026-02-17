@@ -124,6 +124,35 @@
             h1 { font-size: 1.5rem; }
             .ward-card { font-size: 1.15rem; padding: 15px; }
         }
+        
+/* القائمة الجانبية (الأزرار) */
+nav {
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+nav a {
+    padding: 10px 25px;
+    background: white;
+    color: var(--main-blue);
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 17px;
+    transition: all 0.4s ease;
+}
+
+nav a:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+}
     </style>
 </head>
 <body>
@@ -134,6 +163,16 @@
         <p>الأوراد والأحاديث النبوية الشريفة</p>
     </header>
 
+<nav>
+    <a href="duas.html">🤲 الأدعية</a>
+    <a href="hadith.html">📜 الأحاديث</a>
+    <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
+    <a href="azkar.html">📿 الأذكار</a>
+    <a href="asmaa.html">✨ أسماء الله</a>
+    <a href="sebha.html"> السبحه الالكترونيه </a> 
+    <a herf="cards.html"> اصنع صوره دينيه </a> 
+
+</nav>
     <div class="controls">
         <input type="text" id="searchBar" placeholder="بحث في الأوراد...">
         <button class="btn-toggle" onclick="toggleDarkMode()" title="تغيير الوضع">🌙</button>
