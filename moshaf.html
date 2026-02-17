@@ -140,13 +140,33 @@
             border: 2px solid var(--gold-leaf);
         }
 
-        .quran-text {
+            .quran-text {
             color: #1a1a1a;
             font-size: 1.9rem;
             line-height: 2.5;
-            text-align: justify;
-            word-spacing: 4px;
+            text-align: center; /* التوسيط يضمن بقاء النص داخل الإطار بشكل أجمل */
+            word-wrap: break-word; /* كسر الكلمات الطويلة */
+            overflow-wrap: break-word;
+            white-space: normal; /* السماح للنص بالالتفاف */
+            max-width: 100%;
+            display: block;
         }
+
+        /* تعديل إطار المصحف لضمان عدم خروج المحتوى */
+        .quran-frame {
+            background-color: var(--silk-white);
+            width: 95%; /* جعل العرض مرن */
+            max-width: 850px;
+            border: 15px solid var(--ottoman-green);
+            outline: 3px solid var(--gold-leaf);
+            outline-offset: -10px;
+            padding: 40px; /* تقليل البادينج قليلاً لزيادة مساحة النص */
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            box-sizing: border-box; /* يضمن حساب الحدود ضمن العرض */
+            margin-bottom: 50px;
+        }
+
 
         .aya-num {
             color: var(--ruby);
