@@ -102,8 +102,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: 1px solid var(--gold-leaf);
             border-radius: 50%;
             font-size: 18px;
@@ -111,8 +111,10 @@
             color: var(--ottoman-green);
             font-weight: bold;
             background: rgba(212, 175, 55, 0.05);
+            font-family: sans-serif; /* لضمان ظهور الأرقام بوضوح */
         }
 
+        /* زر الموبايل */
         #menuToggle {
             display: none;
             position: fixed;
@@ -163,58 +165,63 @@
 
         async function init() {
             try {
-                // استدعاء ملف الـ JSON الذي رفعته
-                const res = await fetch('./quran.json');
-                if (!res.ok) throw new Error("لم يتم العثور على ملف quran.json");
+                // استدعاء ملف quran.json
+                const res = await fetch('quran.json');
+                if (!res.ok) throw new Error("لم يتم العثور على الملف");
                 
                 quranData = await res.json();
 
                 const list = document.getElementById('surahList');
                 list.innerHTML = ""; 
 
-                // استخراج السور من المفتاح "السور" الموجود بملفك
+                // بناء الفهرس بناءً على مفتاح "السور" في ملفك
                 quranData["السور"].forEach(surah => {
                     const item = document.createElement('div');
                     item.className = 'surah-item';
                     item.id = `s${surah["رقم السورة"]}`;
+                    
+                    // تنظيف اسم السورة من المسافات الزائدة وحساب عدد الآيات
+                    const sName = surah["السورة"].trim();
+                    const vCount = surah["الآيات بالترقيم"].filter(a => a.trim() !== "").length;
+
                     item.innerHTML = `
-                        <span>${surah["رقم السورة"]}. ${surah["السورة"].trim()}</span>
-                        <small style="opacity: 0.7;">${surah["الآيات بالترقيم"].filter(a => a.trim() !== "").length} آية</small>
+                        <span>${surah["رقم السورة"]}. ${sName}</span>
+                        <small style="opacity: 0.7;">${vCount} آية</small>
                     `;
                     item.onclick = () => loadSurah(surah["رقم السورة"]);
                     list.appendChild(item);
                 });
             } catch (err) {
                 console.error(err);
-                document.getElementById('surahList').innerHTML = `<p style="color: #ffbaba; padding: 10px;">خطأ في تحميل ملف القرآن</p>`;
+                document.getElementById('surahList').innerHTML = `<p style="color: #ffbaba; padding: 10px;">خطأ في تحميل البيانات</p>`;
             }
         }
 
-        function loadSurah(num) {
+        function loadSurah(surahNum) {
+            // غلق القائمة في الموبايل عند الاختيار
             document.getElementById('sidebar').classList.remove('open');
-            document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
             
-            const activeItem = document.getElementById(`s${num}`);
+            // تمييز السورة المختارة في الفهرس
+            document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
+            const activeItem = document.getElementById(`s${surahNum}`);
             if (activeItem) activeItem.classList.add('active');
 
             const content = document.getElementById('quranContent');
-            const surah = quranData["السور"].find(s => s["رقم السورة"] == num);
+            const surah = quranData["السور"].find(s => s["رقم السورة"] == surahNum);
             
             if (!surah) return;
 
             let html = `<div class="surah-name-title">${surah["السورة"].trim()}</div>`;
-            
             let text = "";
-            let verseCounter = 1;
+            let verseIndex = 1;
 
-            surah["الآيات بالترقيم"].forEach((ayaText) => {
-                if (ayaText.trim() === "") return; // تخطي الخانات الفارغة إن وجدت
-
-                // تنظيف النص
-                let cleanText = ayaText.trim();
-                
-                text += `${cleanText} <span class="aya-num">${verseCounter}</span> `;
-                verseCounter++;
+            // استخراج الآيات من مصفوفة "الآيات بالترقيم"
+            surah["الآيات بالترقيم"].forEach(ayaText => {
+                const cleanAya = ayaText.trim();
+                if (cleanAya !== "") {
+                    text += `${cleanAya} <span class="aya-num">${verseIndex}</span> `;
+                    verseIndex++;
+                }
             });
 
             content.innerHTML = html + `<div>${text}</div>`;
