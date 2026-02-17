@@ -144,6 +144,57 @@
             header h1 { font-size: 1.8rem; }
             .name-text { font-size: 1.3rem; }
         }
+        .ramadan-card {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* ألوان الغسق الرمضاني */
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.content {
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.4); /* خلفية شفافة لإبراز النص */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.crescent {
+    font-size: 50px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fdbb2d; /* لون ذهبي */
+}
+
+.greeting-text {
+    line-height: 1.8;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.signature {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff;
+    border-top: 2px solid #fdbb2d;
+    display: inline-block;
+    padding-top: 10px;
+}
+
     </style>
 </head>
 <body>
@@ -159,6 +210,20 @@
 
 <div class="search-box">
     <input type="text" id="nameSearch" placeholder="ابحث عن اسم من أسماء الله..." onkeyup="filterNames()">
+</div>
+<div class="ramadan-card">
+    <div class="overlay">
+        <div class="content">
+            <span class="crescent">🌙</span>
+            <h1>مبارك عليكم الشهر</h1>
+            <p class="greeting-text">
+                بمناسبة حلول شهر رمضان المبارك، نرفع إليكم أسمى آيات التهاني والتبريكات، 
+                سائلين المولى عز وجل أن يجعله شهر خير وبركة، وأن يعينكم على صيامه وقيامه، 
+                وأن يتقبل منكم صالح الأعمال.
+            </p>
+            <div class="signature">كل عام وأنتم بخير</div>
+        </div>
+    </div>
 </div>
 
 <div class="table-container">
