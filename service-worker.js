@@ -12,8 +12,12 @@ const assets = [
   './werd.html',
   './cards.html',
   './manifest.json',
-  // أضف روابط الصور التي استخدمتها لتخزن أيضاً
-  'https://www.transparenttextures.com/patterns/arabesque.png'
+  './style.css',
+  './script.js',
+  './assets/images/arabesque.png',
+  './assets/images/icon-512.png',
+  './assets/images/icon-192.png',
+  './assets/images/icon-144.png'
 ];
 
 self.addEventListener('install', e => {
