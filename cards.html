@@ -3,212 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ديوان البطاقات الملكي</title>
+    <title>محراب الحكمة - رمضان 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --royal-blue: #003366;
-            --gold: #d4af37;
-            --deep-red: #7f1d1d;
-            --papyrus: #f4ece1;
+            --islamic-green: #064e3b;
+            --royal-gold: #c5a059;
+            --deep-blue: #002366;
+            --parchment: #fdf5e6;
         }
 
         body {
-            background-color: #0f172a;
-            background-image: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
-            color: var(--gold);
-            font-family: 'Reem Kufi', sans-serif;
+            background-color: #050505;
+            background-image: radial-gradient(circle at center, #0a2a22 0%, #000 100%);
+            color: var(--royal-gold);
+            font-family: 'Amiri', serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 30px 15px;
             min-height: 100vh;
+            margin: 0;
         }
 
-        /* حاوية البطاقة الملكية */
-        .card-box {
-            width: 380px;
-            height: 550px;
-            background: var(--papyrus);
-            border: 5px solid var(--gold);
+        /* تصميم المحراب الملكي */
+        .mihrab-card {
+            width: 100%;
+            max-width: 400px;
+            height: 580px;
+            background: var(--parchment);
+            border: 8px double var(--royal-gold);
+            border-radius: 100px 100px 10px 10px; /* شكل قمة المحراب */
             position: relative;
-            padding: 50px 30px;
+            padding: 60px 30px;
             box-sizing: border-box;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 50px rgba(197, 160, 89, 0.3);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            border-radius: 5px;
+            text-align: center;
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
         }
 
-        /* زخارف الزوايا الفرعونية-العثمانية */
-        .card-box::before {
-            content: "𓋹";
-            position: absolute; top: 15px; font-size: 2rem; color: var(--royal-blue);
+        .mihrab-card::before {
+            content: "﷽";
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            font-size: 2.5rem; color: var(--islamic-green);
         }
-
-        .corner-ornament {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--gold);
-        }
-        .top-right { top: 10px; right: 10px; border-bottom: none; border-left: none; }
-        .bottom-left { bottom: 10px; left: 10px; border-top: none; border-right: none; }
 
         #display-text {
-            font-family: 'Amiri', serif;
-            color: #2d2d2d;
+            color: #1a1a1a;
             font-size: 1.6rem;
-            line-height: 2;
-            text-align: center;
+            line-height: 1.9;
+            font-weight: 700;
             z-index: 2;
-            font-style: italic;
-            transition: all 0.5s ease;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* أزرار الديوان */
-        .grid-menu {
+        /* قائمة الأبواب */
+        .doors-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             margin-top: 30px;
         }
 
         button {
             padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--gold);
-            border: 1px solid var(--gold);
+            background: rgba(6, 78, 59, 0.4);
+            color: var(--royal-gold);
+            border: 1px solid var(--royal-gold);
             cursor: pointer;
             font-family: 'Reem Kufi', sans-serif;
             font-size: 1.1rem;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(5px);
+            transition: 0.3s ease;
+            border-radius: 5px;
         }
 
         button:hover {
-            background: var(--gold);
-            color: var(--royal-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            background: var(--royal-gold);
+            color: var(--islamic-green);
+            transform: translateY(-2px);
         }
 
-        .btn-main {
+        .btn-download {
             grid-column: span 2;
-            background: var(--royal-blue);
-            color: white;
-            border: 2px solid var(--gold);
+            background: var(--islamic-green);
+            color: #fff;
             font-weight: bold;
-            font-size: 1.3rem;
+            border: 2px solid var(--royal-gold);
         }
 
-        #loader {
-            height: 25px;
-            margin-top: 10px;
+        #status-msg {
+            margin-top: 15px;
             font-size: 0.9rem;
             color: #fff;
-            text-shadow: 0 0 5px var(--gold);
+            height: 20px;
+            font-family: 'Reem Kufi', sans-serif;
         }
 
-        /* الختم السفلي */
-        .royal-seal {
+        .card-footer {
             position: absolute;
-            bottom: 20px;
-            font-family: 'Amiri';
-            font-size: 0.8rem;
-            color: var(--gold);
-            border-top: 1px solid var(--gold);
-            padding-top: 5px;
-            width: 80%;
-            text-align: center;
+            bottom: 25px;
+            width: 100%;
+            left: 0;
+            font-size: 0.9rem;
+            color: var(--islamic-green);
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
 
-    <h1 style="font-family: 'Amiri'; font-size: 3rem; margin-bottom: 5px;">ديوان الحكمة الملكي</h1>
-    <p style="color: var(--gold); margin-bottom: 20px;">استحضر بركة الكلمة من خزائن الديوان</p>
+    <h1 style="font-family: 'Reem Kufi'; margin-bottom: 5px;">ديوان الهداية</h1>
+    <p style="color: var(--royal-gold); margin-bottom: 25px;">استخرج نصيبك من نور العلم</p>
 
-    <div class="card-box" id="myCard">
-        <div class="corner-ornament top-right"></div>
-        <div class="corner-ornament bottom-left"></div>
-        
-        <div id="display-text">مرحباً بك في رحاب الديوان.. اختر باباً لفتح المخطوطة.</div>
-        
-        <div class="royal-seal">
-            ختم الديوان الملكي لعام ٢٠٢٦ 
-        </div>
+    <div class="mihrab-card" id="myCard">
+        <div id="display-text">انقر على أحد الأبواب لاستحضار الحكمة...</div>
+        <div class="card-footer">من إصدارات الديوان الملكي الإسلامي</div>
     </div>
 
-    <div id="loader"></div>
+    <div id="status-msg"></div>
 
-    <div class="grid-menu">
-        <button onclick="smartFetch('azkar.html')">𓋹 باب الأذكار</button>
-        <button onclick="smartFetch('hadith.html')">𓃗 باب الأحاديث</button>
-        <button onclick="smartFetch('duas.html')">𓀠 باب الأدعية</button>
-        <button onclick="smartFetch('werd.html')">𓍝 باب الورد</button>
-        <button class="btn-main" onclick="downloadImage()">تحميل المخطوطة كصورة 📥</button>
+    <div class="doors-grid">
+        <button onclick="smartFetch('azkar.html', 'الأذكار')">۞ باب الأذكار</button>
+        <button onclick="smartFetch('hadith.html', 'الأحاديث')">۞ باب الأحاديث</button>
+        <button onclick="smartFetch('duas.html', 'الأدعية')">۞ باب الأدعية</button>
+        <button onclick="smartFetch('werd.html', 'الورد')">۞ باب الورد</button>
+        <button class="btn-download" onclick="downloadImage()">تحميل المخطوطة 📥</button>
     </div>
 
     <script>
-        async function smartFetch(url) {
-            const loader = document.getElementById('loader');
+        async function smartFetch(url, doorName) {
+            const status = document.getElementById('status-msg');
             const display = document.getElementById('display-text');
-            loader.innerText = "جاري استحضار النص من الخزائن الملكية...";
-            display.style.opacity = "0.3";
+            status.innerText = `جاري فتح ${doorName}...`;
+            display.style.opacity = "0.5";
 
             try {
                 const response = await fetch(url);
+                if (!response.ok) throw new Error();
+                
                 const html = await response.text();
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
 
-                const keywords = ['الله', 'اللهم', 'قال', 'رسول', 'سبحان', 'الحمد', 'آمنوا', 'يا رب', 'صلى'];
+                // الكلمات المفتاحية لضمان جودة النص الديني
+                const keywords = ['الله', 'اللهم', 'قال', 'رسول', 'سبحان', 'آمنوا', 'يا رب', 'الحمد', 'نبي'];
 
-                let rawElements = Array.from(doc.querySelectorAll('p, li, span, h3, div'));
-                let validTexts = rawElements
+                // استهداف الأماكن التي يرجح وجود نصوص بها
+                let elements = Array.from(doc.querySelectorAll('p, span, li, h3, .content, .text'));
+                
+                let filteredTexts = elements
                     .map(el => el.innerText.trim())
                     .filter(t => {
-                        const isLongEnough = t.length > 25 && t.length < 350;
-                        const hasKeywords = keywords.some(k => t.includes(k));
-                        return isLongEnough && hasKeywords;
+                        return t.length > 20 && // ليس قصيراً جداً
+                               t.length < 400 && // ليس طويلاً جداً
+                               keywords.some(k => t.includes(k)) && // يحتوي على كلمات دينية
+                               !t.includes('{') && !t.includes('function'); // استبعاد الأكواد
                     });
 
-                setTimeout(() => {
-                    if (validTexts.length > 0) {
-                        display.innerText = validTexts[Math.floor(Math.random() * validTexts.length)];
-                        loader.innerText = "تمت المهمة بنجاح.";
-                    } else {
-                        display.innerText = "عذراً، الخزانة مغلقة حالياً.. حاول لاحقاً.";
-                        loader.innerText = "";
-                    }
-                    display.style.opacity = "1";
-                }, 500);
-
-            } catch (e) {
-                loader.innerText = "خطأ: تأكد من الاتصال بالسيرفر.";
-                display.style.opacity = "1";
+                if (filteredTexts.length > 0) {
+                    const randomText = filteredTexts[Math.floor(Math.random() * filteredTexts.length)];
+                    display.innerText = randomText;
+                    status.innerText = `تم استحضار نص من ${doorName}`;
+                } else {
+                    display.innerText = "الباب مغلق مؤقتاً.. حاول في باب آخر.";
+                    status.innerText = "لم يتم العثور على نصوص متوافقة.";
+                }
+            } catch (error) {
+                status.innerText = "تنبيه: تأكد من وجود ملفات الـ HTML في نفس المسار.";
+                display.innerText = "تعذر الاتصال بالخزينة.. تأكد من رفع الملفات على GitHub أو تشغيلها عبر سيرفر محلي.";
             }
+            display.style.opacity = "1";
         }
 
         function downloadImage() {
-            const btn = document.querySelector('.btn-main');
-            btn.innerText = "جاري المعالجة...";
-            html2canvas(document.getElementById('myCard'), { 
-                scale: 3,
-                backgroundColor: null
-            }).then(canvas => {
+            const card = document.getElementById('myCard');
+            html2canvas(card, { scale: 3 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Royal_Manuscript.png';
+                link.download = 'Mihrab_Dua.png';
                 link.href = canvas.toDataURL();
                 link.click();
-                btn.innerText = "تحميل المخطوطة كصورة 📥";
             });
         }
     </script>
