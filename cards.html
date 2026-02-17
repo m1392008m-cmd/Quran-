@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ديوان البطاقات العثماني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Reem+Kufi:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --ottoman-red: #800000;
+            --gold: #d4af37;
+            --bg: #1a1a1a;
+            --paper: #f4e4bc;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Reem Kufi', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* حاوية البطاقة بتصميم المحراب */
+        .card-frame {
+            width: 380px;
+            height: 550px;
+            background: var(--paper);
+            border: 4px solid var(--gold);
+            position: relative;
+            padding: 40px 25px;
+            box-sizing: border-box;
+            box-shadow: 0 0 40px rgba(0,0,0,0.7);
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* زخرفة علوية (تاج المحراب) */
+        .card-frame::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--ottoman-red);
+            clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 50% 100%, 0% 70%);
+            border-bottom: 3px solid var(--gold);
+        }
+
+        /* نص البطاقة */
+        #text-content {
+            font-family: 'Amiri', serif;
+            color: #2c2c2c;
+            font-size: 1.6rem;
+            line-height: 1.8;
+            text-align: center;
+            z-index: 1;
+            padding-top: 20px;
+        }
+
+        .decorative-icon {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* الأزرار */
+        .controls {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        button {
+            padding: 12px;
+            background: var(--ottoman-red);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            font-family: 'Reem Kufi', sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+
+        button:hover { background: #500000; color: white; }
+
+        .download-btn {
+            grid-column: span 2;
+            background: var(--gold);
+            color: var(--ottoman-red);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .status-msg { margin-top: 10px; color: var(--gold); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <h1 style="color:var(--gold); font-family:'Amiri'">ديوان البطاقات الدعوية</h1>
+
+    <div class="card-frame" id="capture-area">
+        <span class="decorative-icon">﷽</span>
+        <div id="text-content">اختر صنفاً ليظهر نوره هنا..</div>
+        <div style="position:absolute; bottom:20px; right:20px; color:var(--gold); font-size:0.7rem;">
+            موقع روضة الذكر
+        </div>
+    </div>
+
+    <div id="status" class="status-msg"></div>
+
+    <div class="controls">
+        <button onclick="fetchData('azkar.html')">أذكار 📿</button>
+        <button onclick="fetchData('hadith.html')">أحاديث 📜</button>
+        <button onclick="fetchData('duas.html')">أدعية 🤲</button>
+        <button onclick="fetchData('werd.html')">ورد اليوم 📖</button>
+        <button class="download-btn" onclick="saveImage()">تحميل البطاقة كصورة 📥</button>
+    </div>
+
+    <script>
+        async function fetchData(url) {
+            const status = document.getElementById('status');
+            const display = document.getElementById('text-content');
+            status.innerText = "جاري استخراج البيان من الصفحات...";
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("تعذر الوصول للصفحة");
+                
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // تنقية دقيقة: نبحث عن النصوص داخل عناصر القوائم أو الفقرات
+                // استثنينا العناصر القصيرة جداً والعناصر التي قد تكون روابط
+                let elements = Array.from(doc.querySelectorAll('li, p, h3, .text-content'));
+                let texts = elements.map(el => el.innerText.trim())
+                                    .filter(t => t.length > 25 && t.length < 250);
+
+                if (texts.length > 0) {
+                    const randomText = texts[Math.floor(Math.random() * texts.length)];
+                    display.innerText = randomText;
+                    status.innerText = "تم استخراج النص بنجاح.";
+                } else {
+                    status.innerText = "لم نجد نصوصاً مناسبة في هذه الصفحة.";
+                }
+            } catch (err) {
+                status.innerText = "خطأ: تأكد من رفع الموقع على GitHub Pages.";
+                console.error(err);
+            }
+        }
+
+        function saveImage() {
+            const area = document.getElementById('capture-area');
+            html2canvas(area, { scale: 3 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Islamic_Card.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
