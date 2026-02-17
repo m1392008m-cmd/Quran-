@@ -1,87 +1,255 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>المصحف الشريف</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصحف السلطان - العصر العثماني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ottoman-green: #064e3b; /* الأخضر السلطاني */
+            --gold-leaf: #d4af37;     /* ذهبي معتق */
+            --silk-white: #f8f1e5;    /* لون الحرير القديم */
+            --ruby: #7f1d1d;          /* الأحمر الياقوتي العثماني */
+        }
 
-<!-- خط عثماني -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+        body {
+            background-color: #0d1a15;
+            background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            font-family: 'Amiri', serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--gold-leaf);
+        }
 
-<style>
-body{
-    background:#f8f3e6;
-    margin:0;
-    font-family:'Amiri Quran', serif;
+        /* عنوان الصفحة بخط الرقعة */
+        .title-h1 {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            color: var(--gold-leaf);
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+        }
+
+        /* إطار اختيار السورة */
+        .selection-box {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 40px;
+            border: 2px solid var(--gold-leaf);
+            padding: 5px;
+            background: var(--ottoman-green);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: var(--ottoman-green);
+            color: var(--gold-leaf);
+            border: 1px solid var(--gold-leaf);
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* حاوية المصحف (التصميم العثماني) */
+        .quran-frame {
+            background-color: var(--silk-white);
+            width: 100%;
+            max-width: 900px;
+            border: 20px solid var(--ottoman-green);
+            outline: 3px solid var(--gold-leaf);
+            outline-offset: -12px;
+            padding: 60px;
+            position: relative;
+            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            box-sizing: border-box;
+        }
+
+        /* الزخرفة العثمانية العلوية (تاج السورة) */
+        .surah-header {
+            background: var(--ottoman-green);
+            color: var(--gold-leaf);
+            padding: 20px;
+            text-align: center;
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            border: 2px solid var(--gold-leaf);
+            position: relative;
+        }
+
+        .surah-header::before, .surah-header::after {
+            content: "❦";
+            font-size: 1.5rem;
+            margin: 0 20px;
+        }
+
+        /* عرض الآيات */
+        .quran-text {
+            color: #1a1a1a;
+            font-size: 2rem;
+            line-height: 2.8;
+            text-align: justify;
+            word-spacing: 5px;
+        }
+
+        /* شكل رقم الآية (زخرفة إسلامية) */
+        .aya-num {
+            color: var(--ruby);
+            font-family: 'Aref Ruqaa', serif;
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border: 2px solid var(--gold-leaf);
+            border-radius: 50% 0 50% 0; /* شكل زخرفي مميز */
+            margin: 0 10px;
+            font-size: 1.2rem;
+            background: #fff;
+        }
+
+        /* أنيميشن التحميل */
+        #loader {
+            display: none;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--gold-leaf);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .quran-frame { padding: 30px 15px; border-width: 10px; }
+            .title-h1 { font-size: 2rem; }
+        }
+    
+/* القائمة الجانبية (الأزرار) */
+nav {
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1000px;
 }
 
-.container{
-    max-width:900px;
-    margin:40px auto;
-    background:#fffdf5;
-    padding:40px;
-    border:8px double #bfa76f;
-    border-radius:20px;
-    box-shadow:0 0 30px rgba(0,0,0,0.15);
+nav a {
+    padding: 10px 25px;
+    background: white;
+    color: var(--main-blue);
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 17px;
+    transition: all 0.4s ease;
 }
 
-.surah-title{
-    text-align:center;
-    font-size:32px;
-    margin-bottom:30px;
-    color:#8b6f2d;
+nav a:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
 }
-
-.ayah{
-    font-size:28px;
-    line-height:2.4;
-    text-align:justify;
-}
-
-.ayah-number{
-    color:#8b6f2d;
-    font-size:20px;
-}
-</style>
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-    <div id="content"></div>
-</div>
+    <h1 class="title-h1">مُصحف الخلافة العثمانية</h1>
+    
+<nav>
+    <a href="duas.html">🤲 الأدعية</a>
+    <a href="hadith.html">📜 الأحاديث</a>
+    <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
+    <a href="azkar.html">📿 الأذكار</a>
+    <a href="asmaa.html">✨ أسماء الله</a>
+    <a href="sebha.html"> السبحه الالكترونيه </a> 
+    <a href="cards.html"> اصنع صوره دينيه </a> 
+    <a href="werd.html">📖 الوِرد اليومي</a>
+</nav>
+    <div class="selection-box">
+        <select id="surahSelect" onchange="loadSurah(this.value)">
+            <option value="">اختر السورة الشريفة...</option>
+        </select>
+    </div>
 
-<script>
-fetch("quran.json")
-.then(response => response.json())
-.then(data => {
+    <div id="loader">جاري فتح المخطوطة...</div>
 
-    const container = document.getElementById("content");
+    <div class="quran-frame">
+        <div class="surah-header" id="surahTitle">سورة الفاتحة</div>
+        <div class="quran-text" id="quranArea">
+            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+        </div>
+    </div>
 
-    data["السور"].forEach(surah => {
+    <script>
+        // استخدام API القرآن (Al-Quran Cloud - النسخة المبسطة)
+        const apiBase = "https://api.alquran.cloud/v1";
 
-        let title = document.createElement("div");
-        title.className = "surah-title";
-        title.innerText = "سورة " + surah["السورة"];
-        container.appendChild(title);
-
-        let ayatDiv = document.createElement("div");
-        ayatDiv.className = "ayah";
-
-        surah["الآيات بالترقيم"].forEach((ayah, index) => {
-
-            if(ayah.trim() !== ""){
-                ayatDiv.innerHTML += 
-                    ayah + 
-                    `<span class="ayah-number">(${index+1})</span> `;
+        // تحميل قائمة السور
+        async function loadSurahList() {
+            try {
+                const response = await fetch(`${apiBase}/surah`);
+                const result = await response.json();
+                const select = document.getElementById('surahSelect');
+                
+                result.data.forEach(surah => {
+                    let opt = document.createElement('option');
+                    opt.value = surah.number;
+                    opt.innerHTML = `${surah.number}. ${surah.name}`;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                console.error("فشل جلب القائمة");
             }
+        }
 
-        });
+        // جلب السورة المختارة
+        async function loadSurah(num) {
+            if(!num) return;
+            const loader = document.getElementById('loader');
+            const quranArea = document.getElementById('quranArea');
+            const surahTitle = document.getElementById('surahTitle');
 
-        container.appendChild(ayatDiv);
-    });
+            loader.style.display = 'block';
+            quranArea.style.opacity = '0.2';
 
-});
-</script>
+            try {
+                const response = await fetch(`${apiBase}/surah/${num}`);
+                const result = await response.json();
+                
+                surahTitle.innerHTML = result.data.name;
+                
+                let content = "";
+                result.data.ayahs.forEach(aya => {
+                    // حذف "بسم الله الرحمن الرحيم" من بداية كل سورة عدا الفاتحة لأنها تكون مكررة في الـ API
+                    let text = aya.text;
+                    if(num != 1 && aya.numberInSurah == 1) {
+                        text = text.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "");
+                    }
+                    content += `${text} <span class="aya-num">${aya.numberInSurah}</span> `;
+                });
 
+                quranArea.innerHTML = content;
+            } catch (err) {
+                quranArea.innerHTML = "حدث خطأ في جلب الآيات، تأكد من اتصال الإنترنت.";
+            } finally {
+                loader.style.display = 'none';
+                quranArea.style.opacity = '1';
+            }
+        }
+
+        loadSurahList();
+    </script>
 </body>
 </html>
