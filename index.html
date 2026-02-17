@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+ <link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service Worker Failed', err));
+    });
+  }
+</script>
+
 <meta name="description" content="موقع روضة الذكر: أذكار، أدعية، أحاديث، القرآن الكريم، سبحة إلكترونية، كل ما تحتاجه من ذكر وعبادة يومية.">
 <meta name="keywords" content="أذكار, أدعية, دعاء, أحاديث, سبحة, سبحة إلكترونية, قرآن, قرآن كريم, ورد يومي, أذكار الصباح, أذكار المساء">
  <meta name="google-site-verification" content="HZGFIJOEiTkA6qRJ5p4uaaaEs3I2AQriM5GtiqrNQ1Y" />
