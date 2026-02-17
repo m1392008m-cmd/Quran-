@@ -1,32 +1,29 @@
-const CACHE_NAME = "rawdat-althikr-v1";
-
-const urlsToCache = [
-  "./",
-  "./index.html",
-  "./duas.html",
-  "./hadith.html",
-  "./prayer-times.html",
-  "./azkar.html",
-  "./asmaa.html",
-  "./sebha.html",
-  "./cards.html",
-  "./moshaf.html",
-  "./werd.html",
-  "./manifest.json"
+const CACHE_NAME = 'islamic-app-final';
+const assets = [
+  './',
+  './index.html',
+  './moshaf.html',
+  './azkar.html',
+  './hadith.html',
+  './duas.html',
+  './sebha.html',
+  './prayer-times.html',
+  './asmaa.html',
+  './werd.html',
+  './cards.html',
+  './manifest.json',
+  // أضف روابط الصور التي استخدمتها لتخزن أيضاً
+  'https://www.transparenttextures.com/patterns/arabesque.png'
 ];
 
-self.addEventListener("install", function (event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(urlsToCache);
-    })
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(assets))
   );
 });
 
-self.addEventListener("fetch", function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      return response || fetch(event.request);
-    })
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(res => res || fetch(e.request))
   );
 });
