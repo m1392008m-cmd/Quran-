@@ -2,237 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مصحف روضة الذكر</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+    <title>مصحف التراز العثماني</title>
     <style>
-        :root {
-            --ottoman-green: #064e3b;
-            --gold-leaf: #d4af37;
-            --silk-white: #f8f1e5;
-            --sidebar-width: 280px;
-        }
-
-        body {
-            margin: 0;
-            display: flex;
-            background-color: #0d1a15;
-            font-family: 'Amiri', serif;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* الفهرس الجانبي */
-        #sidebar {
-            width: var(--sidebar-width);
-            background: var(--ottoman-green);
-            border-left: 3px solid var(--gold-leaf);
-            display: flex;
-            flex-direction: column;
-            transition: 0.3s;
-            z-index: 100;
-        }
-
-        .sidebar-header {
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            text-align: center;
-            color: var(--gold-leaf);
-            border-bottom: 1px solid var(--gold-leaf);
-        }
-
-        #surahList {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 0;
-        }
-
-        .surah-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            color: white;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .surah-item:hover {
-            background: rgba(212, 175, 55, 0.2);
-            color: var(--gold-leaf);
-        }
-
-        .surah-item.active {
-            background: var(--gold-leaf);
-            color: var(--ottoman-green);
-            font-weight: bold;
-        }
-
-        /* منطقة المحتوى الرئيسي */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
-            background-color: var(--silk-white);
-            padding: 40px;
-            position: relative;
-        }
-
-        #quranContent {
-            max-width: 800px;
-            margin: 0 auto;
-            color: #1a1a1a;
-            line-height: 2.8;
-            font-size: 32px;
-            text-align: justify;
-            direction: rtl;
-        }
-
-        .surah-name-title {
-            text-align: center;
-            font-family: 'Aref Ruqaa', serif;
-            font-size: 50px;
-            color: var(--ottoman-green);
-            margin-bottom: 30px;
-            border-bottom: 2px double var(--gold-leaf);
-        }
-
-        .aya-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 45px;
-            height: 45px;
-            border: 1px solid var(--gold-leaf);
-            border-radius: 50%;
-            font-size: 18px;
-            margin: 0 10px;
-            color: var(--ottoman-green);
-            font-weight: bold;
-            background: rgba(212, 175, 55, 0.05);
-            font-family: sans-serif; /* لضمان ظهور الأرقام بوضوح */
-        }
-
-        /* زر الموبايل */
-        #menuToggle {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--gold-leaf);
-            color: var(--ottoman-green);
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
-
-        @media (max-width: 768px) {
-            #sidebar { position: fixed; right: -100%; height: 100%; }
-            #sidebar.open { right: 0; }
-            #menuToggle { display: block; }
-            main { padding: 20px; }
-            #quranContent { font-size: 26px; }
-        }
+        body { font-family: 'Times New Roman', serif; background-color: #f4f1ea; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        select { width: 100%; padding: 10px; font-size: 18px; margin-bottom: 20px; }
+        .quran-text { font-size: 24px; line-height: 2; text-align: justify; border-top: 2px solid #eee; padding-top: 20px; }
+        .surah-title { text-align: center; font-weight: bold; color: #8e44ad; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="menuToggle" onclick="toggleSidebar()">☰</div>
+<div class="container">
+    <h1>المصحف الشريف (بالرواية المغربية/العثمانية)</h1>
+    
+    <select id="surahSelect" onchange="displaySurah()">
+        <option value="">اختر السورة...</option>
+    </select>
 
-    <aside id="sidebar">
-        <div class="sidebar-header">
-            <h2 style="font-family: 'Aref Ruqaa', serif; margin:0;">فس السور</h2>
+    <div id="quranDisplay" class="quran-text">
         </div>
-        <div id="surahList">
-            <p style="color: white; text-align: center; padding: 20px;">جاري تحميل المصحف...</p>
-        </div>
-    </aside>
+</div>
 
-    <main id="mainContainer">
-        <div id="quranContent">
-            <div style="text-align: center; margin-top: 100px; color: #888;">
-                <h1 style="font-family: 'Aref Ruqaa', serif; color: var(--ottoman-green); font-size: 50px;">مصحف روضة الذكر</h1>
-                <p style="font-size: 20px;">اختر سورة من الفهرس الجانبي لبدء القراءة</p>
-            </div>
-        </div>
-    </main>
+<script>
+    let quranData = null;
 
-    <script>
-        let quranData = null;
-
-        async function init() {
-            try {
-                // استدعاء ملف quran.json
-                const res = await fetch('quran.json');
-                if (!res.ok) throw new Error("لم يتم العثور على الملف");
-                
-                quranData = await res.json();
-
-                const list = document.getElementById('surahList');
-                list.innerHTML = ""; 
-
-                // بناء الفهرس بناءً على مفتاح "السور" في ملفك
-                quranData["السور"].forEach(surah => {
-                    const item = document.createElement('div');
-                    item.className = 'surah-item';
-                    item.id = `s${surah["رقم السورة"]}`;
-                    
-                    // تنظيف اسم السورة من المسافات الزائدة وحساب عدد الآيات
-                    const sName = surah["السورة"].trim();
-                    const vCount = surah["الآيات بالترقيم"].filter(a => a.trim() !== "").length;
-
-                    item.innerHTML = `
-                        <span>${surah["رقم السورة"]}. ${sName}</span>
-                        <small style="opacity: 0.7;">${vCount} آية</small>
-                    `;
-                    item.onclick = () => loadSurah(surah["رقم السورة"]);
-                    list.appendChild(item);
-                });
-            } catch (err) {
-                console.error(err);
-                document.getElementById('surahList').innerHTML = `<p style="color: #ffbaba; padding: 10px;">خطأ في تحميل البيانات</p>`;
-            }
-        }
-
-        function loadSurah(surahNum) {
-            // غلق القائمة في الموبايل عند الاختيار
-            document.getElementById('sidebar').classList.remove('open');
+    // تحميل ملف JSON
+    fetch('quran.json')
+        .then(response => response.json())
+        .then(data => {
+            quranData = data.السور;
+            const select = document.getElementById('surahSelect');
             
-            // تمييز السورة المختارة في الفهرس
-            document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`s${surahNum}`);
-            if (activeItem) activeItem.classList.add('active');
-
-            const content = document.getElementById('quranContent');
-            const surah = quranData["السور"].find(s => s["رقم السورة"] == surahNum);
-            
-            if (!surah) return;
-
-            let html = `<div class="surah-name-title">${surah["السورة"].trim()}</div>`;
-            let text = "";
-            let verseIndex = 1;
-
-            // استخراج الآيات من مصفوفة "الآيات بالترقيم"
-            surah["الآيات بالترقيم"].forEach(ayaText => {
-                const cleanAya = ayaText.trim();
-                if (cleanAya !== "") {
-                    text += `${cleanAya} <span class="aya-num">${verseIndex}</span> `;
-                    verseIndex++;
-                }
+            quranData.forEach((surah, index) => {
+                let option = document.createElement('option');
+                option.value = index;
+                option.textContent = surah.السورة;
+                select.appendChild(option);
             });
+        });
 
-            content.innerHTML = html + `<div>${text}</div>`;
-            document.getElementById('mainContainer').scrollTop = 0;
+    function displaySurah() {
+        const index = document.getElementById('surahSelect').value;
+        const display = document.getElementById('quranDisplay');
+        
+        if (index === "") {
+            display.innerHTML = "";
+            return;
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
+        const surah = quranData[index];
+        // استخدام "الآيات بالترقيم" لعرض النص القرآني المنسق
+        let content = `<div class="surah-title">سورة ${surah.السورة}</div>`;
+        
+        surah["الآيات بالترقيم"].forEach((ayah, i) => {
+            if (ayah.trim() !== "") {
+                content += ayah + ` <span style="color: #c0392b;">(${i + 1})</span> `;
+            }
+        });
 
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
+        display.innerHTML = content;
+    }
+</script>
+
 </body>
 </html>
