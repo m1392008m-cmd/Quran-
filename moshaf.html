@@ -19,7 +19,7 @@
             background-color: #0d1a15;
             font-family: 'Amiri', serif;
             height: 100vh;
-            overflow: hidden; /* لمنع التمرير المزدوج */
+            overflow: hidden;
         }
 
         /* الفهرس الجانبي */
@@ -43,7 +43,7 @@
 
         #surahList {
             flex: 1;
-            overflow-y: auto; /* تمرير قائمة السور فقط */
+            overflow-y: auto;
             padding: 10px 0;
         }
 
@@ -124,11 +124,10 @@
             z-index: 1000;
         }
 
-        /* تحسينات الشاشات الصغيرة */
         @media (max-width: 768px) {
             #sidebar {
                 position: fixed;
-                right: -100%; /* مخفي */
+                right: -100%;
                 height: 100%;
             }
             #sidebar.open {
@@ -147,8 +146,7 @@
         <div class="sidebar-header">
             <h2 style="font-family: 'Aref Ruqaa', serif; margin:0;">فهرس السور</h2>
         </div>
-        <div id="surahList">
-            </div>
+        <div id="surahList"></div>
     </aside>
 
     <main>
@@ -161,76 +159,76 @@
     </main>
 
     <script>
-    let quranData = null;
+        let quranData = null;
 
-    async function init() {
-        try {
-            // جلب ملف JSON
-            const res = await fetch('./quran.json');
-            if (!res.ok) throw new Error("فشل تحميل الملف");
-            const json = await res.json();
+        async function init() {
+            try {
+                // جلب الملف كنص خام لتنظيفه قبل التحويل
+                const res = await fetch('./quran.json?v=' + new Date().getTime());
+                if (!res.ok) throw new Error("فشل في الوصول للملف");
+                
+                let rawText = await res.text();
+                
+                // حل مشكلة الفاصلة الزائدة: حذف أي فاصلة يتبعها إغلاق قوس ] أو }
+                let cleanedText = rawText.replace(/,\s*([\]}])/g, '$1');
+                
+                const json = JSON.parse(cleanedText);
 
-            // التحقق من شكل البيانات
-            quranData = json.data ? json.data : json;
+                // بما أن الملف مصفوفة مباشرة (Array)
+                quranData = { surahs: json };
 
-            if (!quranData.surahs || quranData.surahs.length === 0) {
-                throw new Error("ملف JSON لا يحتوي على سور");
+                const list = document.getElementById('surahList');
+                quranData.surahs.forEach(surah => {
+                    const item = document.createElement('div');
+                    item.className = 'surah-item';
+                    item.id = `s${surah.number}`;
+                    item.innerHTML = `<span>${surah.number}. ${surah.name}</span> <small>${surah.ayahs.length} آية</small>`;
+                    item.onclick = () => loadSurah(surah.number);
+                    list.appendChild(item);
+                });
+            } catch (err) {
+                console.error(err);
+                alert("خطأ في البيانات: " + err.message);
+            }
+        }
+
+        function loadSurah(num) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
+            
+            const activeItem = document.getElementById(`s${num}`);
+            if(activeItem) activeItem.classList.add('active');
+
+            const content = document.getElementById('quranContent');
+            const surah = quranData.surahs.find(s => s.number == num);
+
+            if (!surah) return;
+
+            let html = `<div class="surah-name-title">${surah.name}</div>`;
+            
+            if (num != 1 && num != 9) {
+                html += `<div style="text-align:center; margin-bottom:20px; font-size: 22px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
             }
 
-            // إنشاء قائمة السور في الفهرس
-            const list = document.getElementById('surahList');
-            quranData.surahs.forEach(surah => {
-                const item = document.createElement('div');
-                item.className = 'surah-item';
-                item.id = `s${surah.number}`;
-                item.innerHTML = `<span>${surah.number}. ${surah.name}</span> <small>${surah.ayahs.length} آية</small>`;
-                item.addEventListener('click', () => loadSurah(surah.number));
-                list.appendChild(item);
+            let text = "";
+            surah.ayahs.forEach(aya => {
+                let txt = aya.text;
+                // إزالة البسملة المدمجة في بداية السور (ما عدا الفاتحة)
+                if (num != 1 && aya.numberInSurah == 1) {
+                    txt = txt.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "");
+                }
+                text += `${txt} <span class="aya-num">${aya.numberInSurah}</span> `;
             });
-        } catch (err) {
-            console.error(err);
-            alert("حدث خطأ أثناء تحميل السور: " + err.message);
-        }
-    }
 
-    function loadSurah(num) {
-        document.getElementById('sidebar').classList.remove('open'); // إغلاق الفهرس في الموبايل
-
-        // تمييز السورة المختارة
-        document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
-        const activeItem = document.getElementById(`s${num}`);
-        if (activeItem) activeItem.classList.add('active');
-
-        const content = document.getElementById('quranContent');
-        const surah = quranData.surahs.find(s => s.number == num);
-        if (!surah) return;
-
-        let html = `<div class="surah-name-title">${surah.name}</div>`;
-        
-        // إضافة البسملة ما عدا الفاتحة والتوبة
-        if (num != 1 && num != 9) {
-            html += `<div style="text-align:center; margin-bottom:20px; font-size: 22px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+            content.innerHTML = html + text;
+            document.querySelector('main').scrollTop = 0;
         }
 
-        // بناء نص السورة
-        let text = "";
-        surah.ayahs.forEach(aya => {
-            let txt = aya.text;
-            if (num != 1 && aya.numberInSurah == 1) {
-                txt = txt.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "");
-            }
-            text += `${txt} <span class="aya-num">${aya.numberInSurah}</span> `;
-        });
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
 
-        content.innerHTML = html + text;
-        document.querySelector('main').scrollTop = 0;
-    }
-
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-    }
-
-    window.addEventListener('DOMContentLoaded', init);
+        window.onload = init;
     </script>
 </body>
 </html>
