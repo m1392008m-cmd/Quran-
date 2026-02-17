@@ -1,4 +1,4 @@
-const CACHE_NAME = 'islamic-app-v2';
+const CACHE_NAME = 'islamic-app-v3';
 const assets = [
   './',
   './index.html',
@@ -10,24 +10,28 @@ const assets = [
   './prayer-times.html',
   './asmaa.html',
   './werd.html',
-  './cards.html'
+  './cards.html',
+  './manifest.json'
 ];
 
-// تثبيت الملفات في ذاكرة المتصفح
-self.addEventListener('install', e => {
-  e.waitUntil(
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Caching assets...');
+      // استخدام addAll بحذر، إذا فشل ملف واحد سيفشل الكل
+      // لذا يفضل التأكد من وجود كل الملفات في المستودع
       return cache.addAll(assets);
     })
   );
 });
 
-// تشغيل الموقع من الكاش في حال انقطاع النت
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request).catch(() => {
+        if (event.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+      });
     })
   );
 });
