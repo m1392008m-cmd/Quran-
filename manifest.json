@@ -1,6 +1,6 @@
 {
   "name": "روضة الذكر",
-  "short_name": "الذكر",
+  "short_name": "التطبيق الاسلامي",
   "description": "موقع إسلامي شامل يعمل بدون إنترنت",
   "start_url": "./index.html",
   "display": "standalone",
