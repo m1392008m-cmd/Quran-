@@ -84,14 +84,15 @@
             margin: 0 auto;
             color: #1a1a1a;
             line-height: 2.8;
-            font-size: 30px;
+            font-size: 32px;
             text-align: justify;
+            direction: rtl;
         }
 
         .surah-name-title {
             text-align: center;
             font-family: 'Aref Ruqaa', serif;
-            font-size: 45px;
+            font-size: 50px;
             color: var(--ottoman-green);
             margin-bottom: 30px;
             border-bottom: 2px double var(--gold-leaf);
@@ -101,17 +102,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border: 1px solid var(--gold-leaf);
             border-radius: 50%;
             font-size: 18px;
-            margin: 0 8px;
+            margin: 0 10px;
             color: var(--ottoman-green);
             font-weight: bold;
             background: rgba(212, 175, 55, 0.05);
         }
 
+        /* زر الموبايل */
         #menuToggle {
             display: none;
             position: fixed;
@@ -122,6 +124,7 @@
             padding: 15px;
             border-radius: 50%;
             cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             z-index: 1000;
         }
 
@@ -130,6 +133,7 @@
             #sidebar.open { right: 0; }
             #menuToggle { display: block; }
             main { padding: 20px; }
+            #quranContent { font-size: 26px; }
         }
     </style>
 </head>
@@ -142,84 +146,94 @@
             <h2 style="font-family: 'Aref Ruqaa', serif; margin:0;">فهرس السور</h2>
         </div>
         <div id="surahList">
-            <p style="color: white; text-align: center; padding: 20px;">جاري تحميل البيانات...</p>
+            <p style="color: white; text-align: center; padding: 20px;">جاري تحميل المصحف...</p>
         </div>
     </aside>
 
-    <main>
+    <main id="mainContainer">
         <div id="quranContent">
             <div style="text-align: center; margin-top: 100px; color: #888;">
                 <h1 style="font-family: 'Aref Ruqaa', serif; color: var(--ottoman-green); font-size: 50px;">مصحف روضة الذكر</h1>
-                <p>اختر سورة من القائمة للبدء</p>
+                <p style="font-size: 20px;">اختر سورة من الفهرس الجانبي لبدء القراءة</p>
             </div>
         </div>
     </main>
 
     <script>
-        let fullData = null;
+        let quranData = null;
 
         async function init() {
             try {
                 const res = await fetch('./quran.json?v=' + Date.now());
-                if (!res.ok) throw new Error("الملف غير موجود");
+                if (!res.ok) throw new Error("لم يتم العثور على ملف quran.json");
                 
-                let text = await res.text();
-                // تنظيف الفاصلة الزائدة برمجياً
-                text = text.trim().replace(/,\s*([\]}])/g, '$1');
-                fullData = JSON.parse(text);
+                let rawText = await res.text();
+                
+                // تنظيف الفاصلة الزائدة برمجياً قبل التحويل
+                let cleanedText = rawText.trim().replace(/,\s*([\]}])/g, '$1');
+                
+                quranData = JSON.parse(cleanedText);
 
                 const list = document.getElementById('surahList');
-                list.innerHTML = "";
+                list.innerHTML = ""; 
 
-                // استخدام "chapters" لبناء القائمة كما في ملفك الجديد
-                fullData.chapters.forEach(ch => {
+                // استخدام chapters لبناء الفهرس
+                quranData.chapters.forEach(surah => {
                     const item = document.createElement('div');
                     item.className = 'surah-item';
-                    item.id = `s${ch.surah_number}`;
-                    item.innerHTML = `<span>${ch.surah_number}. ${ch.name_ar}</span> <small>${ch.verses_count} آية</small>`;
-                    item.onclick = () => loadSurah(ch.surah_number);
+                    item.id = `s${surah.surah_number}`;
+                    item.innerHTML = `
+                        <span>${surah.surah_number}. ${surah.name_ar}</span>
+                        <small style="opacity: 0.7;">${surah.verses_count} آية</small>
+                    `;
+                    item.onclick = () => loadSurah(surah.surah_number);
                     list.appendChild(item);
                 });
             } catch (err) {
                 console.error(err);
-                document.getElementById('surahList').innerHTML = `<p style="color:red; padding:10px;">خطأ: ${err.message}</p>`;
+                document.getElementById('surahList').innerHTML = `<p style="color: #ffbaba; padding: 10px;">خطأ في البيانات</p>`;
             }
         }
 
         function loadSurah(num) {
             document.getElementById('sidebar').classList.remove('open');
             document.querySelectorAll('.surah-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`s${num}`).classList.add('active');
+            
+            const activeItem = document.getElementById(`s${num}`);
+            if (activeItem) activeItem.classList.add('active');
 
-            const chapter = fullData.chapters.find(c => c.surah_number == num);
-            // فلترة الآيات التي تنتمي لهذه السورة فقط من قائمة verses
-            const ayahs = fullData.verses.filter(v => v.surah == num);
+            const content = document.getElementById('quranContent');
+            const chapter = quranData.chapters.find(c => c.surah_number == num);
+            
+            // فلترة الآيات التابعة للسورة المختارة من قائمة verses
+            const ayahs = quranData.verses.filter(v => v.surah == num);
 
             let html = `<div class="surah-name-title">${chapter.name_ar}</div>`;
             
+            // إضافة البسملة (ما عدا الفاتحة والتوبة)
             if (num != 1 && num != 9) {
-                html += `<div style="text-align:center; margin-bottom:30px; font-size: 28px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
+                html += `<div style="text-align:center; margin-bottom:30px; font-size: 32px; color: #555;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>`;
             }
 
             let text = "";
             ayahs.forEach(aya => {
                 let txt = aya.text_ar;
-                // تنظيف البسملة إذا كانت مدمجة في أول آية (باستثناء الفاتحة)
+                // تنظيف البسملة من أول آية إذا وجدت (لأننا أضفناها كعنوان)
                 if (num != 1 && aya.ayah == 1) {
                     txt = txt.replace("بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ", "").trim();
                 }
                 text += `${txt} <span class="aya-num">${aya.ayah}</span> `;
             });
 
-            document.getElementById('quranContent').innerHTML = html + `<div>${text}</div>`;
-            document.querySelector('main').scrollTop = 0;
+            content.innerHTML = html + `<div>${text}</div>`;
+            document.getElementById('mainContainer').scrollTop = 0;
         }
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        window.onload = init;
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
