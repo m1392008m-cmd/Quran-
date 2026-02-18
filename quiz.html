@@ -3,135 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المسابقة الدينية الكبرى</title>
+    <title>المسابقة السلطانية الكبرى</title>
     <style>
-        :root { --primary: #2c3e50; --secondary: #27ae60; --error: #e74c3c; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        #quiz-card { background: white; width: 90%; max-width: 600px; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-        .question-text { font-size: 1.4rem; font-weight: bold; margin-bottom: 1.5rem; color: var(--primary); }
-        .options-grid { display: grid; gap: 10px; }
-        .btn-opt { padding: 15px; border: 2px solid #ddd; border-radius: 10px; background: none; cursor: pointer; font-size: 1.1rem; transition: all 0.2s; }
-        .btn-opt:hover:not(:disabled) { border-color: var(--secondary); background: #f0fff4; }
-        .correct { background-color: var(--secondary) !important; color: white; border-color: var(--secondary) !important; }
-        .wrong { background-color: var(--error) !important; color: white; border-color: var(--error) !important; }
-        .stats { display: flex; justify-content: space-between; margin-bottom: 1rem; color: #7f8c8d; font-weight: bold; }
-        #loader { font-size: 1.2rem; color: var(--primary); }
-        .hidden { display: none; }
+        :root {
+            --gold: #d4af37;
+            --royal-blue: #1a2a6c;
+            --laser-cyan: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* خلفية ملكية متدرجة مع نمط زخرفي */
+            background: radial-gradient(circle at center, #b21f1f, #1a2a6c, #000);
+            font-family: 'Amiri', serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* حاوية الزجاج الوهمي */
+        #quiz-container {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid var(--gold);
+            border-radius: 25px;
+            padding: 40px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(0, 242, 255, 0.2);
+            position: relative;
+        }
+
+        /* عنوان سلطاني */
+        h1 {
+            text-align: center;
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold);
+            font-size: 2.5rem;
+            margin-top: 0;
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 10px;
+        }
+
+        .question-box { margin-bottom: 30px; min-height: 120px; }
+        
+        .question-text {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #fff;
+            text-shadow: 1px 1px 5px #000;
+        }
+
+        /* أزرار ليزرية زجاجية */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            text-align: right;
+        }
+
+        .opt-btn:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--laser-cyan);
+            box-shadow: 0 0 15px var(--laser-cyan);
+            transform: translateY(-2px);
+        }
+
+        .opt-btn.selected {
+            background: var(--gold) !important;
+            color: black;
+            font-weight: bold;
+            border-color: #fff;
+        }
+
+        /* أزرار التحكم السفلي */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--royal-blue);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--gold);
+            color: var(--royal-blue);
+        }
+
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* شاشة المراجعة */
+        #review-summary {
+            display: none;
+            text-align: right;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .review-item { border-bottom: 1px dashed var(--gold); padding: 10px 0; }
+        
+        /* شاشة النهاية */
+        .final-results { display: none; text-align: center; }
+        .score-circle {
+            width: 150px; height: 150px; border: 5px solid var(--gold);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-size: 3rem; margin: 20px auto;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        .correct-ans { color: #2ecc71; }
+        .wrong-ans { color: #e74c3c; }
+
     </style>
 </head>
 <body>
 
-<div id="quiz-card">
-    <div id="loader">جاري معالجة قاعدة البيانات...</div>
-    
-    <div id="game-zone" class="hidden">
-        <div class="stats">
-            <span>السؤال: <span id="q-count">1</span> / 15</span>
-            <span>النتيجة: <span id="score">0</span></span>
+<div id="quiz-container">
+    <div id="loading">جاري فتح الديوان السلطاني...</div>
+
+    <div id="quiz-ui" class="hidden" style="display:none;">
+        <h1>المسابقة السلطانية</h1>
+        
+        <div class="stats" style="display: flex; justify-content: space-between; color: var(--gold); margin-bottom: 15px;">
+            <span>السؤال: <span id="q-number">1</span> / 15</span>
+            <span id="timer"></span>
         </div>
-        <div id="question" class="question-text"></div>
-        <div id="options" class="options-grid"></div>
+
+        <div class="question-box">
+            <div id="q-text" class="question-text"></div>
+            <div id="options-box" class="options-grid"></div>
+        </div>
+
+        <div class="controls">
+            <button id="prev-btn" class="nav-btn" onclick="prevQ()">السؤال السابق</button>
+            <button id="review-btn" class="nav-btn" style="background: #444;" onclick="toggleReview()">مراجعة الإجابات</button>
+            <button id="next-btn" class="nav-btn" onclick="nextQ()">السؤال التالي</button>
+        </div>
+
+        <div id="review-summary"></div>
+        
+        <button id="submit-all" class="nav-btn" style="width: 100%; margin-top: 20px; display: none; background: var(--gold); color: black;" onclick="finishQuiz()">تسليم الإجابات النهائية</button>
     </div>
 
-    <div id="result-zone" class="hidden">
-        <h2 id="final-msg">أحسنت!</h2>
-        <p style="font-size: 1.5rem;">لقد أجبت على <span id="final-score">0</span> من 15</p>
-        <button onclick="location.reload()" style="padding: 10px 25px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">إعادة الاختبار</button>
+    <div id="results-ui" class="final-results">
+        <h2>النتيجة النهائية</h2>
+        <div class="score-circle" id="final-score">0</div>
+        <div id="detailed-report" style="text-align: right; max-height: 300px; overflow-y: auto;"></div>
+        <button class="nav-btn" style="margin-top: 20px;" onclick="location.reload()">إعادة الكرة</button>
     </div>
 </div>
 
 <script>
-    let allData = [];
-    let currentPool = [];
+    let allQuestions = [];
+    let selectedQuestions = [];
+    let userAnswers = {}; // لتخزين الإجابات id -> answer
     let currentIndex = 0;
-    let score = 0;
 
-    // دالة لمعالجة الملف المشوه (تجاوز أخطاء JSON)
-    async function loadAndFixData() {
+    async function init() {
         try {
-            const response = await fetch('ans.json');
-            const rawText = await response.text();
+            const res = await fetch('ans.json');
+            const text = await res.text();
             
-            // استخدام Regex لاستخراج الأجسام {} حتى لو كانت المصفوفات مكسورة
+            // تنظيف الملف وتحويله لمصفوفة واحدة
             const regex = /{[^{}]*}/g;
-            const matches = rawText.match(regex);
-            
-            if (!matches) throw new Error("الملف فارغ أو غير صالح");
-
+            const matches = text.match(regex);
             let uniqueMap = new Map();
+            
             matches.forEach(m => {
                 try {
                     let q = JSON.parse(m);
-                    // فلترة التكرار بناءً على نص السؤال لضمان عدم تكرار "السحور" وغيره
-                    if (!uniqueMap.has(q.question)) {
-                        uniqueMap.set(q.question, q);
-                    }
-                } catch(e) {}
+                    if (!uniqueMap.has(q.question)) uniqueMap.set(q.question, q);
+                } catch(e){}
             });
 
-            allData = Array.from(uniqueMap.values());
-            startNewGame();
+            allQuestions = Array.from(uniqueMap.values());
+            selectedQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 15);
 
-        } catch (err) {
-            document.getElementById('loader').innerText = "خطأ: تأكد من وجود ملف ans.json بجانب صفحة الـ HTML.";
-            console.error(err);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('quiz-ui').style.display = 'block';
+            renderQuestion();
+        } catch (e) {
+            document.getElementById('loading').innerText = "خطأ في الاتصال بالديوان!";
         }
     }
 
-    function startNewGame() {
-        // خلط البيانات وسحب 15 سؤال عشوائي
-        currentPool = allData.sort(() => 0.5 - Math.random()).slice(0, 15);
-        document.getElementById('loader').classList.add('hidden');
-        document.getElementById('game-zone').classList.remove('hidden');
-        showQuestion();
-    }
-
-    function showQuestion() {
-        if (currentIndex >= 15) return showEnd();
+    function renderQuestion() {
+        const q = selectedQuestions[currentIndex];
+        document.getElementById('q-number').innerText = currentIndex + 1;
+        document.getElementById('q-text').innerText = q.question;
         
-        const q = currentPool[currentIndex];
-        document.getElementById('q-count').innerText = currentIndex + 1;
-        document.getElementById('question').innerText = q.question;
-        
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
 
         q.options.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'btn-opt';
+            btn.className = 'opt-btn' + (userAnswers[currentIndex] === opt ? ' selected' : '');
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(btn, opt, q.answer);
-            optionsDiv.appendChild(btn);
+            btn.onclick = () => {
+                userAnswers[currentIndex] = opt;
+                renderQuestion(); // لتحديث حالة الزر المختار
+            };
+            box.appendChild(btn);
+        });
+
+        // تحكم الأزرار
+        document.getElementById('prev-btn').disabled = currentIndex === 0;
+        document.getElementById('next-btn').innerText = currentIndex === 14 ? "إنهاء المراجعة" : "السؤال التالي";
+        
+        // إظهار زر التسليم في السؤال الأخير
+        document.getElementById('submit-all').style.display = currentIndex === 14 ? 'block' : 'none';
+    }
+
+    function nextQ() {
+        if (currentIndex < 14) {
+            currentIndex++;
+            renderQuestion();
+        } else {
+            toggleReview(true); // افتح المراجعة تلقائياً في النهاية
+        }
+    }
+
+    function prevQ() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion();
+        }
+    }
+
+    function toggleReview(forceShow = false) {
+        const div = document.getElementById('review-summary');
+        if (div.style.display === 'block' && !forceShow) {
+            div.style.display = 'none';
+            return;
+        }
+        
+        div.style.display = 'block';
+        div.innerHTML = '<h3>ملخص إجاباتك:</h3>';
+        selectedQuestions.forEach((q, i) => {
+            const ans = userAnswers[i] || '<span style="color:red">لم تُجب</span>';
+            div.innerHTML += `<div class="review-item">س${i+1}: ${q.question} <br> <b>إجابتك:</b> ${ans}</div>`;
         });
     }
 
-    function checkAnswer(btn, selected, correct) {
-        const btns = document.querySelectorAll('.btn-opt');
-        btns.forEach(b => b.disabled = true);
+    function finishQuiz() {
+        let score = 0;
+        const report = document.getElementById('detailed-report');
+        report.innerHTML = '<h3>التصحيح السلطاني:</h3>';
 
-        if (selected === correct) {
-            btn.classList.add('correct');
-            score++;
-            document.getElementById('score').innerText = score;
-        } else {
-            btn.classList.add('wrong');
-            btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
-        }
+        selectedQuestions.forEach((q, i) => {
+            const isCorrect = userAnswers[i] === q.answer;
+            if (isCorrect) score++;
+            
+            report.innerHTML += `
+                <div class="review-item">
+                    <b>س${i+1}:</b> ${q.question}<br>
+                    <span class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">إجابتك: ${userAnswers[i] || 'لا يوجد'}</span><br>
+                    ${!isCorrect ? '<span>الصحيح: ' + q.answer + '</span>' : ''}
+                </div>`;
+        });
 
-        setTimeout(() => {
-            currentIndex++;
-            showQuestion();
-        }, 1500);
-    }
-
-    function showEnd() {
-        document.getElementById('game-zone').classList.add('hidden');
-        document.getElementById('result-zone').classList.remove('hidden');
+        document.getElementById('quiz-ui').style.display = 'none';
+        document.getElementById('results-ui').style.display = 'block';
         document.getElementById('final-score').innerText = score;
-        document.getElementById('final-msg').innerText = score > 10 ? "ممتاز! معلوماتك قوية" : "محاولة جيدة، اقرأ أكثر!";
     }
 
-    loadAndFixData();
+    init();
 </script>
+
 </body>
 </html>
