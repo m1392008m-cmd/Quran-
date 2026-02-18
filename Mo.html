@@ -2,17 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المصحف الشريف - النسخة الملكية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المصحف الشريف - الديوان السلطاني</title>
     <style>
         :root {
             --gold: #d4af37;
             --laser: #00f2ff;
-            --glass: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.08);
+            --deep-blue: #0a0e17;
         }
 
         body {
             margin: 0;
-            background: radial-gradient(circle at center, #1a2a6c, #0b132b, #000);
+            background: radial-gradient(circle at top, #1a2a6c, #0a0e17, #000);
             color: #fff;
             font-family: 'Amiri', serif;
             min-height: 100vh;
@@ -22,140 +24,195 @@
             padding: 20px;
         }
 
+        /* حاوية المصحف الزجاجية */
         #quran-vault {
             background: var(--glass);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 2px solid var(--gold);
-            border-radius: 30px;
+            border-radius: 40px;
             width: 95%;
-            max-width: 900px;
+            max-width: 1000px;
             padding: 40px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.25), inset 0 0 20px rgba(0, 242, 255, 0.1);
+            position: relative;
         }
 
         h1 {
             text-align: center;
             color: var(--gold);
-            font-size: 2.8rem;
-            text-shadow: 0 0 15px var(--gold);
-            margin-bottom: 30px;
-            border-bottom: 1px double var(--gold);
-            padding-bottom: 10px;
+            font-size: 3rem;
+            text-shadow: 0 0 20px var(--gold);
+            margin: 0 0 40px 0;
+            letter-spacing: 2px;
         }
 
+        /* لوحة التحكم الملكية */
         .controls {
             display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 15px;
+            margin-bottom: 40px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         select {
             flex: 2;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             border: 1px solid var(--gold);
             color: var(--gold);
-            padding: 12px;
+            padding: 15px;
             border-radius: 12px;
-            font-size: 1.2rem;
-            outline: none;
+            font-size: 1.4rem;
             cursor: pointer;
+            outline: none;
+            font-family: 'Amiri', serif;
         }
 
-        button {
-            flex: 1;
+        .nav-btn {
+            flex: 0.5;
             background: var(--gold);
             color: #000;
             border: none;
-            padding: 10px;
             border-radius: 12px;
             font-weight: bold;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        button:hover { box-shadow: 0 0 15px var(--gold); transform: scale(1.02); }
+        .nav-btn:hover {
+            box-shadow: 0 0 20px var(--gold);
+            transform: scale(1.05);
+        }
 
+        /* محراب عرض الآيات */
         #display-text {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            font-size: 2.2rem;
-            line-height: 2.8;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 25px;
+            padding: 50px;
+            font-size: 2.4rem;
+            line-height: 3;
             text-align: center;
             max-height: 60vh;
             overflow-y: auto;
             border: 1px inset rgba(0, 242, 255, 0.2);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.6);
         }
 
-        .ayah-block { display: inline; }
+        .ayah-container {
+            display: inline;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .ayah-container:hover {
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        /* رقم الآية الليزري */
         .ayah-num {
             display: inline-flex;
-            width: 40px; height: 40px;
-            border: 1px solid var(--gold);
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--gold);
             border-radius: 50%;
-            justify-content: center; align-items: center;
-            font-size: 1rem; color: var(--laser);
-            margin: 0 10px;
-            background: rgba(0,0,0,0.3);
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            margin: 0 15px;
+            color: var(--laser);
+            background: rgba(0,0,0,0.6);
+            font-family: 'Times New Roman', serif;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
         }
 
-        #display-text::-webkit-scrollbar { width: 6px; }
+        /* تخصيص السكرول بار */
+        #display-text::-webkit-scrollbar { width: 8px; }
         #display-text::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        #display-text::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+
+        .loader { text-align: center; font-size: 1.8rem; color: var(--gold); margin-top: 50px; }
     </style>
 </head>
 <body>
 
 <div id="quran-vault">
-    <h1>المصحف الإلكتروني الملكي</h1>
-    
-    <div class="controls">
-        <select id="surah-select" onchange="loadSurah(this.value)">
-            <option value="">اختر السورة الشريفة...</option>
-        </select>
-    </div>
+    <h1>المصحف الشريف</h1>
 
-    <div id="display-text">قم باختيار السورة من القائمة السلطانية أعلاه...</div>
+    <div id="loading" class="loader">جاري فتح الديوان السلطاني...</div>
+
+    <div id="main-interface" style="display:none;">
+        <div class="controls">
+            <button class="nav-btn" onclick="moveSurah(-1)">السابق</button>
+            <select id="surah-selector" onchange="renderSurah(this.value)">
+                <option value="">اختر السورة الشريفة...</option>
+            </select>
+            <button class="nav-btn" onclick="moveSurah(1)">التالي</button>
+        </div>
+
+        <div id="display-text"></div>
+    </div>
 </div>
 
 <script>
-    let qData = null;
+    let quranFullData = null;
 
-    async function init() {
+    async function loadQuran() {
         try {
-            const res = await fetch('qur0an.json');
-            qData = await res.json();
+            const response = await fetch('qur0an.json');
+            quranFullData = await response.json();
             
-            const select = document.getElementById('surah-select');
-            qData.chapters.forEach(ch => {
+            const selector = document.getElementById('surah-selector');
+            quranFullData.chapters.forEach(ch => {
                 const opt = document.createElement('option');
                 opt.value = ch.surah_number;
-                opt.innerText = `سورة ${ch.name_ar}`;
-                select.appendChild(opt);
+                opt.innerText = `سورة ${ch.name_ar} (${ch.verses_count} آية)`;
+                selector.appendChild(opt);
             });
-        } catch (e) {
-            document.getElementById('display-text').innerText = "خطأ: تأكد من وجود ملف qur0an.json بجانب الصفحة.";
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-interface').style.display = 'block';
+        } catch (error) {
+            document.getElementById('loading').innerText = "خطأ: لم يتم العثور على ملف qur0an.json";
+            console.error(error);
         }
     }
 
-    function loadSurah(surahNum) {
+    function renderSurah(surahNum) {
         if (!surahNum) return;
         const display = document.getElementById('display-text');
         display.innerHTML = "";
 
-        // تصفية الآيات الخاصة بالسورة المختارة
-        const ayahs = qData.verses.filter(v => v.surah == surahNum);
+        // تصفية الآيات من ملف qur0an.json السليم
+        const filteredVerses = quranFullData.verses.filter(v => v.surah == surahNum);
         
-        ayahs.forEach(v => {
+        filteredVerses.forEach(v => {
             display.innerHTML += `
-                <div class="ayah-block">
+                <div class="ayah-container">
                     ${v.text_ar} <span class="ayah-num">${v.ayah}</span>
                 </div>`;
         });
-        display.scrollTop = 0;
+        
+        display.scrollTop = 0; // العودة للبداية عند تغيير السورة
     }
 
-    init();
+    function moveSurah(dir) {
+        const selector = document.getElementById('surah-selector');
+        let nextIndex = parseInt(selector.value || 0) + dir;
+        
+        // التحقق من حدود السور (114 سورة)
+        if (nextIndex >= 1 && nextIndex <= 114) {
+            selector.value = nextIndex;
+            renderSurah(nextIndex);
+        }
+    }
+
+    loadQuran();
 </script>
+
 </body>
 </html>
