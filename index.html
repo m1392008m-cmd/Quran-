@@ -16,14 +16,6 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker Registered'))
-        .catch(err => console.log('Service Worker Failed', err));
-    });
-  }
 </script>
 
 <meta name="description" content="موقع روضة الذكر: أذكار، أدعية، أحاديث، القرآن الكريم، سبحة إلكترونية، كل ما تحتاجه من ذكر وعبادة يومية.">
@@ -46,7 +38,7 @@ if ('serviceWorker' in navigator) {
 body {
     margin:0; padding:0;
     font-family: 'Amiri', serif;
-    background-color: var(--bg-color);
+    background-color: var(--bg-white);
     background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); /* زخرفة إسلامية خفيفة */
     min-height:100vh;
     display:flex;
