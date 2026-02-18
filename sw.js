@@ -14,7 +14,7 @@ const assets = [
   './cards.html',
   './style.css',
   './script.js',
-  './MO.html',
+  './Mo.html',
   './ans.json',
   './quran-simple.txt',
   './manifest.json',
