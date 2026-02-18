@@ -1,4 +1,5 @@
-const CACHE_NAME = 'islamic-app-v2';
+const CACHE_NAME = 'islamic-app-v3';
+
 const assets = [
   './',
   './index.html',
@@ -13,40 +14,52 @@ const assets = [
   './cards.html',
   './style.css',
   './script.js',
-  './Mo.html',
+  './MO.html',
   './ans.json',
-  './quran-simple.txt', // ملف القرآن الأساسي
+  './quran-simple.txt',
   './manifest.json',
-  './assets/images/icon-512.png',
-  './assets/images/icon-192.png'
+  './assets/images/icon-192.png',
+  './assets/images/icon-512.png'
 ];
 
-// تثبيت الـ Service Worker وتخزين الملفات
-self.addEventListener('install', e => {
-  e.waitUntil(
+// تثبيت الكاش
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('Caching assets...');
       return cache.addAll(assets);
     })
   );
+  self.skipWaiting();
 });
 
-// تفعيل الـ SW وحذف الكاش القديم
-self.addEventListener('activate', e => {
-  e.waitUntil(
+// حذف النسخ القديمة
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
       );
     })
   );
+  self.clients.claim();
 });
 
-// استراتيجية "الرد من الكاش أولاً ثم الشبكة" لضمان السرعة والعمل أوفلاين
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
+// جلب الملفات (Network First Strategy)
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        return caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, response.clone());
+          return response;
+        });
+      })
+      .catch(() => {
+        return caches.match(event.request);
+      })
   );
 });
