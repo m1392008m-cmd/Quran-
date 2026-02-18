@@ -3,280 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الديوان السلطاني: المصحف والمسابقة</title>
+    <title>المصحف الشريف - الديوان السلطاني</title>
     <style>
         :root {
             --gold: #d4af37;
-            --laser-blue: #00f2ff;
-            --royal-red: #600;
-            --glass: rgba(255, 255, 255, 0.07);
+            --laser: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.08);
+            --bg-dark: #0a0e17;
         }
 
         body {
             margin: 0;
-            background: radial-gradient(circle at center, #1a2a6c, #0b132b, #000);
+            background: radial-gradient(circle at center, #1a2a6c, #0a0e17, #000);
             color: #fff;
             font-family: 'Amiri', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        /* حاوية الزجاج الوهمي */
-        #main-deck {
+        /* لوحة العرض الزجاجية */
+        #quran-vault {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 2px solid var(--gold);
-            border-radius: 30px;
+            border-radius: 35px;
             width: 95%;
-            max-width: 1100px;
+            max-width: 1000px;
             padding: 40px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-            position: relative;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(0, 242, 255, 0.1);
         }
 
-        .tab-buttons {
+        h1 {
+            text-align: center;
+            color: var(--gold);
+            font-size: 3rem;
+            text-shadow: 0 0 20px var(--gold);
+            margin: 0 0 30px 0;
+            border-bottom: 2px double var(--gold);
+            padding-bottom: 15px;
+        }
+
+        /* التحكم في اختيار السور */
+        .controls {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 30px;
         }
 
-        .tab-btn {
-            background: none;
+        select {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid var(--gold);
             color: var(--gold);
-            padding: 10px 30px;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 15px;
+            border-radius: 15px;
             font-size: 1.3rem;
-            transition: 0.3s;
+            cursor: pointer;
+            outline: none;
         }
 
-        .tab-btn.active {
+        .nav-btn {
             background: var(--gold);
             color: #000;
-            box-shadow: 0 0 20px var(--gold);
-        }
-
-        /* قسم المسابقة */
-        .quiz-section, .quran-section { display: none; }
-        .active-section { display: block; }
-
-        .question-text { font-size: 1.8rem; margin-bottom: 20px; color: #fff; text-shadow: 0 0 10px rgba(0,242,255,0.5); }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .opt-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--laser-blue);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
+            border: none;
+            padding: 0 25px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: 0.3s;
-            font-size: 1.2rem;
         }
 
-        .opt-btn.selected { background: var(--gold); color: #000; border-color: #fff; }
+        .nav-btn:hover {
+            box-shadow: 0 0 15px var(--gold);
+            transform: scale(1.05);
+        }
 
-        /* قسم المصحف */
-        #quran-display {
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-            padding: 30px;
-            font-size: 2rem;
-            line-height: 2.5;
+        /* منطقة النص القرآني */
+        #display-text {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 25px;
+            padding: 40px;
+            font-size: 2.2rem;
+            line-height: 3;
             text-align: center;
-            max-height: 50vh;
+            max-height: 60vh;
             overflow-y: auto;
-            border: 1px inset var(--gold);
+            border: 1px inset rgba(0, 242, 255, 0.2);
+            word-spacing: 5px;
         }
 
-        .ayah-num {
+        .ayah-block {
+            display: inline;
+            position: relative;
+        }
+
+        .ayah-marker {
             display: inline-flex;
-            width: 40px; height: 40px;
-            border: 1px solid var(--gold);
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--gold);
             border-radius: 50%;
-            justify-content: center; align-items: center;
-            font-size: 1rem; color: var(--laser-blue);
-            margin: 0 10px;
-        }
-
-        .nav-controls { display: flex; justify-content: space-between; margin-top: 30px; }
-        .action-btn { background: var(--gold); color: #000; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-
-        #review-panel {
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            margin: 0 15px;
+            color: var(--laser);
             background: rgba(0,0,0,0.5);
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 15px;
-            display: none;
+            font-family: sans-serif;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
         }
+
+        /* تخصيص السكرول */
+        #display-text::-webkit-scrollbar { width: 8px; }
+        #display-text::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+        .loader { text-align: center; font-size: 1.5rem; color: var(--gold); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
-<div id="main-deck">
-    <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('quiz')">المسابقة الملكية</button>
-        <button class="tab-btn" onclick="switchTab('quran')">المصحف الشريف</button>
-    </div>
+<div id="quran-vault">
+    <h1>المصحف الإلكتروني الملكي</h1>
 
-    <div id="quiz-sec" class="quiz-section active-section">
-        <div id="quiz-ui">
-            <div style="display:flex; justify-content: space-between; color: var(--gold); margin-bottom: 10px;">
-                <span>السؤال: <span id="q-idx">1</span> / 15</span>
-                <span id="score-display">الإجابات المكتملة: 0</span>
-            </div>
-            <div id="q-text" class="question-text">جاري تحميل الأسئلة...</div>
-            <div id="options-box" class="options-grid"></div>
-            
-            <div class="nav-controls">
-                <button class="action-btn" onclick="navQuiz(-1)">السابق</button>
-                <button class="action-btn" style="background: #555; color: #fff;" onclick="toggleReview()">مراجعة إجاباتك</button>
-                <button class="action-btn" onclick="navQuiz(1)">التالي</button>
-            </div>
-            <div id="review-panel"></div>
-            <button id="submit-btn" class="action-btn" style="width:100%; margin-top:20px; display:none; background: #27ae60; color: #fff;" onclick="finishQuiz()">تسليم المسابقة نهائياً</button>
-        </div>
-        <div id="result-ui" style="display:none; text-align:center;">
-            <h2 style="font-size: 3rem; color: var(--gold);">النتيجة: <span id="final-score">0</span> / 15</h2>
-            <div id="correction-report" style="text-align: right; max-height: 300px; overflow-y: auto; padding: 10px;"></div>
-            <button class="action-btn" onclick="location.reload()">إعادة الاختبار</button>
-        </div>
-    </div>
+    <div id="loading" class="loader">جاري معالجة الألواح وتصحيح النصوص...</div>
 
-    <div id="quran-sec" class="quran-section">
-        <select id="surah-select" onchange="loadSurah()" style="width:100%; padding:15px; background:rgba(0,0,0,0.5); color:var(--gold); border:1px solid var(--gold); border-radius:10px; font-size:1.2rem; margin-bottom:20px;">
-            <option value="">اختر السورة...</option>
-        </select>
-        <div id="quran-display">اختر سورة لعرض آياتها بالرسم العثماني الليزري...</div>
+    <div id="content" style="display:none;">
+        <div class="controls">
+            <button class="nav-btn" onclick="moveSurah(-1)">السابق</button>
+            <select id="surah-picker" onchange="displayAyahs(this.value)">
+                <option value="">اختر السورة الشريفة...</option>
+            </select>
+            <button class="nav-btn" onclick="moveSurah(1)">التالي</button>
+        </div>
+
+        <div id="display-text"></div>
     </div>
 </div>
 
 <script>
-    let quizData = [], selectedQuiz = [], userAns = {}, quizIdx = 0;
-    let quranData = [];
+    let quranArray = [];
 
-    // دالة التبديل بين الأقسام
-    function switchTab(type) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.quiz-section, .quran-section').forEach(s => s.classList.remove('active-section'));
+    // المعالج السلطاني لتصحيح أخطاء ملف quran.json
+    function fixText(rawText) {
+        if (!rawText) return "";
+        // 1. إزالة جميع المسافات الزائدة بين الحروف (ب س م -> بسم)
+        let fixed = rawText.replace(/\s+/g, '');
         
-        if(type === 'quiz') {
-            document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
-            document.getElementById('quiz-sec').classList.add('active-section');
-        } else {
-            document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
-            document.getElementById('quran-sec').classList.add('active-section');
+        // 2. تصحيح رمز "الآ" الغريب الذي يظهر في الملف
+        fixed = fixed.replace(//g, ''); 
+        
+        // 3. تنظيف أي رموز تحكم غير مرئية قد تسبب مشاكل في العرض
+        fixed = fixed.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
+
+        return fixed;
+    }
+
+    async function loadQuranData() {
+        try {
+            const response = await fetch('quran.json');
+            const data = await response.json();
+            
+            // سحب مصفوفة السور أياً كان اسم المفتاح (لأن اسم المفتاح في ملفك مشفر)
+            const firstKey = Object.keys(data)[0];
+            quranArray = data[firstKey];
+
+            const picker = document.getElementById('surah-picker');
+            quranArray.forEach((s, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                // بما أن اسم السورة تالف، سنعرض رقمها كمعرف ملكي
+                opt.innerText = `السورة رقم ${i + 1}`;
+                picker.appendChild(opt);
+            });
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        } catch (err) {
+            document.getElementById('loading').innerText = "خطأ: تأكد من ملف quran.json بجانب الصفحة.";
+            console.error(err);
         }
     }
 
-    // جلب ومعالجة البيانات
-    async function init() {
-        // 1. تحميل المسابقة
-        try {
-            const resAns = await fetch('ans.json');
-            const textAns = await resAns.text();
-            const matches = textAns.match(/{[^{}]*}/g);
-            let uniqueQ = new Map();
-            matches.forEach(m => {
-                let q = JSON.parse(m);
-                if(!uniqueQ.has(q.question)) uniqueQ.set(q.question, q);
-            });
-            selectedQuiz = Array.from(uniqueQ.values()).sort(() => 0.5 - Math.random()).slice(0, 15);
-            renderQuiz();
-        } catch(e) { console.error("خطأ في ملف المسابقة"); }
-
-        // 2. تحميل المصحف
-        try {
-            const resQ = await fetch('quran.json');
-            const dataQ = await resQ.json();
-            quranData = dataQ[Object.keys(dataQ)[0]];
-            const sel = document.getElementById('surah-select');
-            quranData.forEach((s, i) => {
-                let opt = document.createElement('option');
-                opt.value = i; opt.innerText = "سورة رقم " + (i+1);
-                sel.appendChild(opt);
-            });
-        } catch(e) { console.error("خطأ في ملف المصحف"); }
-    }
-
-    // منطق المسابقة
-    function renderQuiz() {
-        const q = selectedQuiz[quizIdx];
-        document.getElementById('q-idx').innerText = quizIdx + 1;
-        document.getElementById('q-text').innerText = q.question;
-        const box = document.getElementById('options-box');
-        box.innerHTML = '';
-        
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'opt-btn' + (userAns[quizIdx] === opt ? ' selected' : '');
-            btn.innerText = opt;
-            btn.onclick = () => { userAns[quizIdx] = opt; renderQuiz(); updateScoreCount(); };
-            box.appendChild(btn);
-        });
-
-        document.getElementById('submit-btn').style.display = (quizIdx === 14) ? 'block' : 'none';
-    }
-
-    function navQuiz(dir) {
-        if(quizIdx + dir >= 0 && quizIdx + dir < 15) {
-            quizIdx += dir;
-            renderQuiz();
-        }
-    }
-
-    function updateScoreCount() {
-        document.getElementById('score-display').innerText = `الإجابات المكتملة: ${Object.keys(userAns).length}`;
-    }
-
-    function toggleReview() {
-        const p = document.getElementById('review-panel');
-        if(p.style.display === 'block') { p.style.display = 'none'; return; }
-        p.style.display = 'block';
-        p.innerHTML = '<h3 style="color:var(--gold)">مراجعة ما قبل التسليم:</h3>';
-        selectedQuiz.forEach((q, i) => {
-            p.innerHTML += `<div style="border-bottom:1px solid #444; padding:5px;">س${i+1}: ${userAns[i] || '<span style="color:red">لم تُجب</span>'}</div>`;
-        });
-    }
-
-    function finishQuiz() {
-        let score = 0;
-        const report = document.getElementById('correction-report');
-        selectedQuiz.forEach((q, i) => {
-            let correct = (userAns[i] === q.answer);
-            if(correct) score++;
-            report.innerHTML += `<div style="margin-bottom:10px; border-bottom:1px solid #333;">
-                <b>س${i+1}: ${q.question}</b><br>
-                <span style="color:${correct?'#2ecc71':'#e74c3c'}">إجابتك: ${userAns[i] || 'لا يوجد'}</span><br>
-                ${!correct ? '<span style="color:var(--gold)">الصواب: '+q.answer+'</span>' : ''}
-            </div>`;
-        });
-        document.getElementById('quiz-ui').style.display = 'none';
-        document.getElementById('result-ui').style.display = 'block';
-        document.getElementById('final-score').innerText = score;
-    }
-
-    // منطق المصحف
-    function loadSurah() {
-        const idx = document.getElementById('surah-select').value;
-        if(idx === "") return;
-        const surah = quranData[idx];
-        const display = document.getElementById('quran-display');
+    function displayAyahs(index) {
+        if (index === "") return;
+        const surah = quranArray[index];
+        const display = document.getElementById('display-text');
         display.innerHTML = "";
-        const ayahs = surah[Object.keys(surah)[0]] || [];
-        ayahs.forEach((a, i) => {
-            let clean = a.replace(/\s+/g, ''); // معالجة المسافات بين الحروف
-            display.innerHTML += `<span>${clean}</span><span class="ayah-num">${i+1}</span>`;
+
+        // العثور على مصفوفة الآيات (عادةً هي الحقل الذي يحتوي على أطول مصفوفة)
+        let ayahs = [];
+        for (let key in surah) {
+            if (Array.isArray(surah[key]) && surah[key].length > ayahs.length) {
+                ayahs = surah[key];
+            }
+        }
+
+        ayahs.forEach((txt, i) => {
+            if (txt.trim().length < 2) return; // تخطي الأسطر الفارغة
+            const clean = fixText(txt);
+            display.innerHTML += `<div class="ayah-block">${clean} <span class="ayah-marker">${i + 1}</span></div> `;
         });
+        
+        display.scrollTop = 0; // العودة للأعلى عند تبديل السورة
     }
 
-    init();
+    function moveSurah(step) {
+        const picker = document.getElementById('surah-picker');
+        let next = parseInt(picker.value || 0) + step;
+        if (next >= 0 && next < quranArray.length) {
+            picker.value = next;
+            displayAyahs(next);
+        }
+    }
+
+    loadQuranData();
 </script>
+
 </body>
 </html>
