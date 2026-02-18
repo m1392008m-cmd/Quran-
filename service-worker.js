@@ -1,4 +1,4 @@
-const CACHE_NAME = 'islamic-app-final';
+const CACHE_NAME = 'islamic-app-v1';
 const assets = [
   './',
   './index.html',
@@ -11,23 +11,42 @@ const assets = [
   './asmaa.html',
   './werd.html',
   './cards.html',
-  './manifest.json',
   './style.css',
   './script.js',
-  './assets/images/arabesque.png',
+  './MO.html',
+  './ans.json',
+  './quran-simple.txt', // ملف القرآن الأساسي
+  './manifest.json',
   './assets/images/icon-512.png',
-  './assets/images/icon-192.png',
-  './assets/images/icon-144.png'
+  './assets/images/icon-192.png'
 ];
 
+// تثبيت الـ Service Worker وتخزين الملفات
 self.addEventListener('install', e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(assets))
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('Caching assets...');
+      return cache.addAll(assets);
+    })
   );
 });
 
+// تفعيل الـ SW وحذف الكاش القديم
+self.addEventListener('activate', e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    })
+  );
+});
+
+// استراتيجية "الرد من الكاش أولاً ثم الشبكة" لضمان السرعة والعمل أوفلاين
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
   );
 });
