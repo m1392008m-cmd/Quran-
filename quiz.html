@@ -2,125 +2,112 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المسابقة الدينية الذكية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المسابقة الدينية الكبرى</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        #quiz-container { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .question { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #34495e; }
+        :root { --primary: #2c3e50; --secondary: #27ae60; --error: #e74c3c; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #quiz-card { background: white; width: 90%; max-width: 600px; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .question-text { font-size: 1.4rem; font-weight: bold; margin-bottom: 1.5rem; color: var(--primary); }
         .options-grid { display: grid; gap: 10px; }
-        button.option-btn { padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; transition: 0.3s; font-size: 1rem; text-align: right; }
-        button.option-btn:hover { background: #e1f5fe; border-color: #3498db; }
-        .stats { margin-top: 20px; font-weight: bold; color: #7f8c8d; display: flex; justify-content: space-between; }
-        #result-screen { text-align: center; display: none; }
-        .correct { background-color: #2ecc71 !important; color: white; border-color: #27ae60 !important; }
-        .wrong { background-color: #e74c3c !important; color: white; border-color: #c0392b !important; }
-        .loader { text-align: center; font-size: 1.2rem; color: #3498db; }
+        .btn-opt { padding: 15px; border: 2px solid #ddd; border-radius: 10px; background: none; cursor: pointer; font-size: 1.1rem; transition: all 0.2s; }
+        .btn-opt:hover:not(:disabled) { border-color: var(--secondary); background: #f0fff4; }
+        .correct { background-color: var(--secondary) !important; color: white; border-color: var(--secondary) !important; }
+        .wrong { background-color: var(--error) !important; color: white; border-color: var(--error) !important; }
+        .stats { display: flex; justify-content: space-between; margin-bottom: 1rem; color: #7f8c8d; font-weight: bold; }
+        #loader { font-size: 1.2rem; color: var(--primary); }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div id="quiz-container">
-    <div id="loading" class="loader">جاري تحميل ومعالجة الأسئلة...</div>
+<div id="quiz-card">
+    <div id="loader">جاري معالجة قاعدة البيانات...</div>
     
-    <div id="quiz-content" style="display:none;">
-        <h1>مسابقة المعلومات الدينية</h1>
+    <div id="game-zone" class="hidden">
         <div class="stats">
-            <span>السؤال: <span id="current-idx">1</span> / 15</span>
+            <span>السؤال: <span id="q-count">1</span> / 15</span>
             <span>النتيجة: <span id="score">0</span></span>
         </div>
-        <hr>
-        <div id="question-text" class="question"></div>
-        <div id="options-container" class="options-grid"></div>
+        <div id="question" class="question-text"></div>
+        <div id="options" class="options-grid"></div>
     </div>
 
-    <div id="result-screen">
-        <h2>انتهت المسابقة!</h2>
-        <p style="font-size: 1.5rem;">نتيجتك النهائية هي: <span id="final-score">0</span> من 15</p>
-        <button onclick="location.reload()" style="padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">إعادة المحاولة</button>
+    <div id="result-zone" class="hidden">
+        <h2 id="final-msg">أحسنت!</h2>
+        <p style="font-size: 1.5rem;">لقد أجبت على <span id="final-score">0</span> من 15</p>
+        <button onclick="location.reload()" style="padding: 10px 25px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">إعادة الاختبار</button>
     </div>
 </div>
 
 <script>
-    let allQuestions = [];
-    let selectedQuestions = [];
+    let allData = [];
+    let currentPool = [];
     let currentIndex = 0;
     let score = 0;
 
-    // دالة لجلب الملف ومعالجة الأخطاء الهيكلية فيه
-    async function loadQuestions() {
+    // دالة لمعالجة الملف المشوه (تجاوز أخطاء JSON)
+    async function loadAndFixData() {
         try {
             const response = await fetch('ans.json');
-            let text = await response.text();
+            const rawText = await response.text();
             
-            // معالجة مشكلة المصفوفات المتكررة [][][] وتحويلها لمصفوفة واحدة صالحة
-            // نبحث عن كل الكائنات { ... } ونجمعها
+            // استخدام Regex لاستخراج الأجسام {} حتى لو كانت المصفوفات مكسورة
             const regex = /{[^{}]*}/g;
-            const matches = text.match(allMatchesRegex(text));
+            const matches = rawText.match(regex);
             
-            // تنظيف البيانات وحذف التكرار بناءً على نص السؤال
-            let uniqueQuestions = [];
-            let seenText = new Set();
+            if (!matches) throw new Error("الملف فارغ أو غير صالح");
 
-            // محاولة تحليل كل كائن بمفرده لتجنب انهيار الكود بسبب خطأ في كائن واحد
-            const rawItems = text.split(/}\s*,?\s*{/); 
-            // طريقة أكثر أماناً لتحليل JSON المشوه
-            let jsonObjects = [];
-            try {
-                // محاولة ذكية لإصلاح التنسيق
-                let fixedText = text.replace(/\]\s*\[/g, ','); // دمج المصفوفات
-                jsonObjects = JSON.parse(fixedText);
-            } catch (e) {
-                // إذا فشل الإصلاح التلقائي، نستخدم Regex لاستخراج الأسئلة
-                const matches = text.match(/{[^}]+}/g);
-                jsonObjects = matches.map(m => JSON.parse(m));
-            }
-
-            jsonObjects.forEach(q => {
-                if (!seenText.has(q.question)) {
-                    uniqueQuestions.push(q);
-                    seenText.add(q.question);
-                }
+            let uniqueMap = new Map();
+            matches.forEach(m => {
+                try {
+                    let q = JSON.parse(m);
+                    // فلترة التكرار بناءً على نص السؤال لضمان عدم تكرار "السحور" وغيره
+                    if (!uniqueMap.has(q.question)) {
+                        uniqueMap.set(q.question, q);
+                    }
+                } catch(e) {}
             });
 
-            // اختيار 15 سؤال عشوائي
-            selectedQuestions = uniqueQuestions.sort(() => 0.5 - Math.random()).slice(0, 15);
-            
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('quiz-content').style.display = 'block';
-            displayQuestion();
+            allData = Array.from(uniqueMap.values());
+            startNewGame();
 
-        } catch (error) {
-            document.getElementById('loading').innerHTML = "خطأ في تحميل الملف. تأكد من وجود ans.json بجانب ملف الـ HTML.";
-            console.error(error);
+        } catch (err) {
+            document.getElementById('loader').innerText = "خطأ: تأكد من وجود ملف ans.json بجانب صفحة الـ HTML.";
+            console.error(err);
         }
     }
 
-    function displayQuestion() {
-        if (currentIndex >= selectedQuestions.length) {
-            showResults();
-            return;
-        }
+    function startNewGame() {
+        // خلط البيانات وسحب 15 سؤال عشوائي
+        currentPool = allData.sort(() => 0.5 - Math.random()).slice(0, 15);
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('game-zone').classList.remove('hidden');
+        showQuestion();
+    }
 
-        const q = selectedQuestions[currentIndex];
-        document.getElementById('current-idx').innerText = currentIndex + 1;
-        document.getElementById('question-text').innerText = q.question;
+    function showQuestion() {
+        if (currentIndex >= 15) return showEnd();
         
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
+        const q = currentPool[currentIndex];
+        document.getElementById('q-count').innerText = currentIndex + 1;
+        document.getElementById('question').innerText = q.question;
+        
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
 
         q.options.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn';
+            btn.className = 'btn-opt';
             btn.innerText = opt;
             btn.onclick = () => checkAnswer(btn, opt, q.answer);
-            container.appendChild(btn);
+            optionsDiv.appendChild(btn);
         });
     }
 
     function checkAnswer(btn, selected, correct) {
-        const buttons = document.querySelectorAll('.option-btn');
-        buttons.forEach(b => b.disabled = true); // منع الضغط المتكرر
+        const btns = document.querySelectorAll('.btn-opt');
+        btns.forEach(b => b.disabled = true);
 
         if (selected === correct) {
             btn.classList.add('correct');
@@ -128,26 +115,23 @@
             document.getElementById('score').innerText = score;
         } else {
             btn.classList.add('wrong');
-            // إظهار الإجابة الصحيحة
-            buttons.forEach(b => {
-                if (b.innerText === correct) b.classList.add('correct');
-            });
+            btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
         }
 
         setTimeout(() => {
             currentIndex++;
-            displayQuestion();
+            showQuestion();
         }, 1500);
     }
 
-    function showResults() {
-        document.getElementById('quiz-content').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
+    function showEnd() {
+        document.getElementById('game-zone').classList.add('hidden');
+        document.getElementById('result-zone').classList.remove('hidden');
         document.getElementById('final-score').innerText = score;
+        document.getElementById('final-msg').innerText = score > 10 ? "ممتاز! معلوماتك قوية" : "محاولة جيدة، اقرأ أكثر!";
     }
 
-    loadQuestions();
+    loadAndFixData();
 </script>
-
 </body>
 </html>
