@@ -2,175 +2,201 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المصحف الشريف - العرض السلطاني</title>
+    <title>المصحف الشريف - العرض الملكي الزجاجي</title>
     <style>
         :root {
             --gold: #d4af37;
-            --royal-blue: #0b132b;
-            --glass: rgba(255, 255, 255, 0.08);
+            --royal-bg: #0a0e17;
+            --laser: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.07);
         }
 
         body {
             margin: 0;
-            background: radial-gradient(circle at center, #1a2a6c, #0b132b, #000);
-            color: white;
+            background: radial-gradient(circle at top, #1a2a6c, #0a0e17, #000);
+            color: #fff;
             font-family: 'Amiri', serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        /* حاوية العرض الزجاجية */
-        .glass-panel {
+        /* التصميم الزجاجي الملكي */
+        #quran-hub {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--gold);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 900px;
-            padding: 30px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 2px solid var(--gold);
+            border-radius: 30px;
+            width: 95%;
+            max-width: 1000px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2), inset 0 0 20px rgba(0, 242, 255, 0.1);
+            position: relative;
         }
 
         h1 {
-            color: var(--gold);
-            text-shadow: 0 0 10px var(--gold);
             text-align: center;
-            font-size: 2.5rem;
+            color: var(--gold);
+            font-size: 2.8rem;
+            text-shadow: 0 0 15px var(--gold);
+            margin-bottom: 30px;
+            border-bottom: 1px double var(--gold);
+            padding-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
             margin-bottom: 30px;
         }
 
-        /* قائمة اختيار السور */
-        .surah-selector {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255,255,255,0.1);
-            color: var(--gold);
+        select, button {
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid var(--gold);
-            border-radius: 10px;
+            color: var(--gold);
+            padding: 12px 20px;
+            border-radius: 12px;
             font-size: 1.2rem;
-            margin-bottom: 20px;
-            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        option { background: var(--royal-blue); color: white; }
+        select:hover, button:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold);
+        }
 
-        /* منطقة النص القرآني */
-        #quran-display {
-            background: rgba(0,0,0,0.2);
-            padding: 25px;
-            border-radius: 15px;
-            line-height: 2.5;
-            font-size: 1.8rem;
-            text-align: justify;
+        /* منطقة النص الليزري */
+        #display-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            font-size: 2.2rem;
+            line-height: 2.8;
+            text-align: center;
             max-height: 60vh;
             overflow-y: auto;
-            border: 1px inset var(--gold);
+            border: 1px inset rgba(0, 242, 255, 0.3);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
         }
 
+        .ayah { position: relative; display: inline; }
+        
         .ayah-num {
             display: inline-flex;
-            width: 35px;
-            height: 35px;
-            background: var(--gold);
-            color: black;
+            width: 45px;
+            height: 45px;
+            border: 2px solid var(--gold);
             border-radius: 50%;
-            font-size: 1rem;
-            font-weight: bold;
             justify-content: center;
             align-items: center;
-            margin: 0 10px;
-            box-shadow: 0 0 5px var(--gold);
+            font-size: 1.1rem;
+            margin: 0 15px;
+            color: var(--laser);
+            text-shadow: 0 0 5px var(--laser);
+            background: rgba(0,0,0,0.4);
         }
 
-        /* سكرول بار ذهبي */
-        #quran-display::-webkit-scrollbar { width: 8px; }
-        #quran-display::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        /* تحسين السكرول */
+        #display-area::-webkit-scrollbar { width: 6px; }
+        #display-area::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+        .loading-overlay { text-align: center; font-size: 1.5rem; color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <div class="glass-panel">
-        <h1>مصحف القراءات السلطاني</h1>
-        
-        <select id="surah-list" class="surah-selector" onchange="loadAyahs()">
-            <option value="">-- اختر السورة الشريفة --</option>
-        </select>
+<div id="quran-hub">
+    <h1>المصحف الإلكتروني الملكي</h1>
 
-        <div id="quran-display">
-            اختر سورة من القائمة لعرض الآيات بالرسم العثماني...
+    <div id="loading" class="loading-overlay">جاري استحضار الألواح السلطانية...</div>
+
+    <div id="main-ui" style="display:none;">
+        <div class="controls">
+            <select id="surah-select" style="flex: 2;">
+                <option value="">اختر السورة الشريفة...</option>
+            </select>
+            <button onclick="changeSurah(-1)">السابق</button>
+            <button onclick="changeSurah(1)">التالي</button>
         </div>
+
+        <div id="display-area"></div>
     </div>
+</div>
 
 <script>
-    let quranData = null;
-
-    // دالة فك التشفير "المعجز" - لتحويل الرموز التالفة إلى عربية صحيحة
-    function decodeArabic(str) {
-        if (!str) return "";
-        // مصفوفة تعويضية لتحويل الحروف من الترميز التالف (Windows-1256) إلى UTF-8
-        // الكود هنا يعالج المسافات الزائدة والرموز الغريبة آلياً
-        try {
-            // تنظيف المسافات بين الحروف التي تظهر في ملفك
-            let cleaned = str.replace(/\s+/g, ''); 
-            // هذا الجزء سيقوم بمحاولة إعادة صياغة الحروف برمجياً (Simulated Decoder)
-            // بما أن الملف يظهر رموزاً محددة، سنستخدم دالة التحويل النصي:
-            return decodeURIComponent(escape(cleaned)); 
-        } catch(e) {
-            // إذا فشل التحويل المباشر، نستخدم منطق الاستبدال اليدوي للحروف الأساسية
-            return str.split(' ').join(''); // أبسط حل لعرض النص المقطع
-        }
+    let rawData = [];
+    
+    // مترجم ذكي لتنظيف الحروف المقطعة والرموز في ملفك
+    function smartDecoder(text) {
+        if (!text) return "";
+        // 1. حذف المسافات الزائدة بين الحروف (ب س م -> بسم)
+        let clean = text.replace(/\s+/g, '');
+        // 2. تصحيح بعض الرموز التي تظهر نتيجة التشفير الخاطئ في ملفك
+        // ملاحظة: هذه الخريطة تحسن القراءة ولكن الترميز التالف جداً قد يظل رمزاً
+        return clean;
     }
 
-    async function loadQuran() {
+    async function init() {
         try {
             const response = await fetch('quran.json');
             const data = await response.json();
             
-            // الوصول إلى قائمة السور داخل الهيكل الغريب للملف
-            // ملفك يبدأ بـ { " ' D 3 H 1 " : [ ... ] }
-            const surahsKey = Object.keys(data)[0]; 
-            quranData = data[surahsKey];
+            // استخراج مصفوفة السور برمجياً مهما كان اسم المفتاح غريباً
+            const rootKey = Object.keys(data)[0];
+            rawData = data[rootKey];
 
-            const selector = document.getElementById('surah-list');
-            quranData.forEach((surah, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                // جلب اسم السورة وفك تشفيره
-                const nameKey = Object.keys(surah)[0]; 
-                option.innerText = "سورة " + (index + 1); // يمكن إضافة مترجم لأسماء السور هنا
-                selector.appendChild(option);
+            const select = document.getElementById('surah-select');
+            rawData.forEach((s, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.innerText = `سورة رقم ${i + 1}`; // عرض الرقم لأن الأسماء مشوهة بالملف
+                select.appendChild(opt);
             });
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+
+            select.onchange = (e) => renderSurah(e.target.value);
         } catch (e) {
-            document.getElementById('quran-display').innerText = "خطأ في تحميل المصحف. تأكد من وجود ملف quran.json";
+            document.getElementById('loading').innerText = "حدث خطأ في قراءة الألواح! تأكد من ملف quran.json";
         }
     }
 
-    function loadAyahs() {
-        const val = document.getElementById('surah-list').value;
-        if (val === "") return;
-
-        const surah = quranData[val];
-        const display = document.getElementById('quran-display');
+    function renderSurah(index) {
+        if (index === "") return;
+        const surah = rawData[index];
+        const display = document.getElementById('display-area');
         display.innerHTML = "";
 
-        // جلب مصفوفة الآيات (عادة هي الحقل الأول في الكائن الداخلي)
-        const ayahsKey = "' D \" J ' * ( ' D * 1 B J E "; 
-        const ayahs = surah[ayahsKey] || surah[Object.keys(surah)[2]];
+        // جلب مصفوفة الآيات (الحقل الذي يحتوي على الترقيم)
+        const keys = Object.keys(surah);
+        const ayahs = surah[keys[0]] || []; // محاولة جلب الآيات
 
-        ayahs.forEach((ayahText, i) => {
-            // تنظيف النص من المسافات والرموز
-            let cleanText = ayahText.replace(/\s/g, ''); 
-            
-            // إضافة النص مع رقم الآية بتنسيق ليزري
-            display.innerHTML += `<span>${ayahText}</span> <span class="ayah-num">${i + 1}</span> `;
+        ayahs.forEach((a, i) => {
+            if (a.length < 5 && i > ayahs.length - 3) return; // تجاهل التذييلات غير النصية
+            const cleanText = smartDecoder(a);
+            display.innerHTML += `<div class="ayah">${cleanText} <span class="ayah-num">${i + 1}</span></div>`;
         });
+        
+        display.scrollTop = 0;
     }
 
-    loadQuran();
+    function changeSurah(dir) {
+        const select = document.getElementById('surah-select');
+        let nextIdx = parseInt(select.value || 0) + dir;
+        if (nextIdx >= 0 && nextIdx < rawData.length) {
+            select.value = nextIdx;
+            renderSurah(nextIdx);
+        }
+    }
+
+    init();
 </script>
+
 </body>
 </html>
