@@ -2,63 +2,79 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>المصحف الإلكتروني</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المصحف الشريف</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .ayah { border-bottom: 1px solid #eee; padding: 10px 0; line-height: 1.8; font-size: 1.2rem; }
-        .surah-header { background: #2c3e50; color: white; padding: 10px; margin-top: 20px; border-radius: 5px; }
-        .verse-num { color: #27ae60; font-weight: bold; margin-left: 10px; font-size: 0.9rem; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #27ae60; padding-bottom: 10px; }
+        .surah-header { background: #27ae60; color: white; padding: 12px; margin: 30px 0 15px 0; border-radius: 8px; font-size: 1.4rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .ayah { border-bottom: 1px solid #f0f0f0; padding: 15px 10px; line-height: 2.2; font-size: 1.35rem; color: #333; transition: background 0.3s; }
+        .ayah:hover { background: #fdfdfd; }
+        .v-num { display: inline-block; width: 35px; height: 35px; line-height: 35px; border: 1px solid #27ae60; color: #27ae60; border-radius: 50%; text-align: center; font-size: 0.9rem; margin-left: 10px; font-weight: bold; background: #f0fff4; }
+        #loading { text-align: center; font-size: 1.2rem; color: #666; padding: 50px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>المصحف الشريف</h1>
-    <div id="quran-container">جاري تحميل الآيات...</div>
+    <h1>المصحف الإلكتروني</h1>
+    <div id="loading">جاري تحميل الآيات...</div>
+    <div id="quran-container"></div>
 </div>
 
 <script>
     async function loadQuran() {
+        const container = document.getElementById('quran-container');
+        const loading = document.getElementById('loading');
+        
         try {
-            // جلب ملف النص (تأكد أن الملف في نفس المجلد مع صفحة الـ HTML)
-            const response = await fetch('quran-simple.txt');
-            const data = await response.text();
+            // استخدام مسار نسبي لضمان العمل على GitHub Pages
+            const response = await fetch('./quran-simple.txt');
             
+            if (!response.ok) throw new Error('لم يتم العثور على ملف quran-simple.txt');
+            
+            const data = await response.text();
             const lines = data.split('\n');
+            
             let htmlContent = '';
             let currentSurah = 0;
 
             lines.forEach(line => {
-                // تجاهل التعليقات والأسطر الفارغة
-                if (line.startsWith('#') || line.trim() === '') return;
+                // تخطي الأسطر غير المطلوبة
+                if (line.startsWith('#') || !line.includes('|')) return;
 
-                const [surah, verse, text] = line.split('|');
+                const parts = line.split('|');
+                if (parts.length < 3) return;
 
-                // إضافة عنوان السورة عند تغير رقم السورة
-                if (surah !== currentSurah) {
-                    currentSurah = surah;
-                    htmlContent += `<div class="surah-header">سورة رقم: ${surah}</div>`;
+                const surahNum = parts[0].trim();
+                const verseNum = parts[1].trim();
+                const text = parts[2].trim();
+
+                // عند بدء سورة جديدة
+                if (surahNum !== currentSurah) {
+                    currentSurah = surahNum;
+                    htmlContent += `<div class="surah-header">سورة رقم: ${surahNum}</div>`;
                 }
 
-                // إضافة الآية
                 htmlContent += `
                     <div class="ayah">
-                        <span class="verse-num">(${verse})</span>
-                        <span class="text">${text}</span>
+                        <span class="v-num">${verseNum}</span>
+                        <span>${text}</span>
                     </div>`;
             });
 
-            document.getElementById('quran-container').innerHTML = htmlContent;
+            loading.style.display = 'none'; // إخفاء كلمة جاري التحميل
+            container.innerHTML = htmlContent;
 
         } catch (error) {
-            document.getElementById('quran-container').innerHTML = "حدث خطأ أثناء تحميل الملف. تأكد من وجود quran-simple.txt بجانب ملف الـ HTML.";
-            console.error(error);
+            loading.innerHTML = `<span style="color:red">خطأ: ${error.message}</span><br>تأكد أن ملف quran-simple.txt مرفوع في نفس المجلد.`;
+            console.error('Error fetching the file:', error);
         }
     }
 
-    // تشغيل الدالة عند فتح الصفحة
-    loadQuran();
+    // الانتظار حتى يتم تحميل الصفحة بالكامل
+    window.addEventListener('DOMContentLoaded', loadQuran);
 </script>
 
 </body>
