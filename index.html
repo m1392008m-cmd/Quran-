@@ -3,20 +3,6 @@
 <head>
 <meta name="theme-color" content="#1a3a5f">
  <link rel="manifest" href="manifest.json">
-<script>
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => {
-        console.log("PWA جاهز 👑", reg);
-      })
-      .catch(err => {
-        console.log("خطأ في التسجيل:", err);
-      });
-  });
-}
-</script>
 
 <meta name="description" content="موقع روضة الذكر: أذكار، أدعية، أحاديث، القرآن الكريم، سبحة إلكترونية، كل ما تحتاجه من ذكر وعبادة يومية.">
 <meta name="keywords" content="أذكار, أدعية, دعاء, أحاديث, سبحة, سبحة إلكترونية, قرآن, قرآن كريم, ورد يومي, أذكار الصباح, أذكار المساء">
@@ -277,6 +263,15 @@ h1 {
 <footer>
     جميع الحقوق محفوظة © 2026 - صُمم بواسطة <strong>مصطفى عبد التواب</strong>
 </footer>
-
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log("PWA جاهز 👑", reg))
+      .catch(err => console.log("خطأ في التسجيل:", err));
+  });
+}
+</script>
+</body>
 </body>
 </html>
