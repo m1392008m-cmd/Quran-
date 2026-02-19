@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تواصل معنا</title>
+
+<style>
+body{
+    font-family: 'Amiri', serif;
+    background:#fdfbf7;
+    text-align:center;
+}
+
+.container{
+    max-width:500px;
+    margin:40px auto;
+}
+
+form, .thank-you{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+input, textarea{
+    width:90%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    padding:10px 20px;
+    background:#1a3a5f;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+.thank-you{
+    display:none;
+}
+
+.success-icon{
+    font-size:50px;
+    color:green;
+}
+</style>
+
+<script>
+function showThankYou(){
+    document.getElementById("contactForm").style.display="none";
+    document.getElementById("thankYouMessage").style.display="block";
+}
+</script>
+
+</head>
+<body>
+
+<h2>📩 تواصل معنا</h2>
+
+<div class="container">
+
+<form id="contactForm"
+      action="https://formsubmit.co/m1392008m@gmail.com"
+      method="POST"
+      onsubmit="showThankYou()">
+
+    <input type="text" name="name" placeholder="الاسم" required>
+    <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+    <textarea name="message" placeholder="اكتب رسالتك هنا" required></textarea>
+
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_template" value="table">
+
+    <button type="submit">إرسال</button>
+</form>
+
+<div class="thank-you" id="thankYouMessage">
+    <div class="success-icon">✅</div>
+    <h3>تم إرسال رسالتك بنجاح</h3>
+    <p>جزاك الله خيرًا لتواصلك معنا، سيتم الرد عليك في أقرب وقت بإذن الله.</p>
+</div>
+
+</div>
+
+</body>
+</html>
