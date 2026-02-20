@@ -7,12 +7,19 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
 
+/* ألوان رئيسية */
+:root {
+    --main-blue: #1a3a5f;
+    --gold: #ffc107;
+}
+
 body {
     margin:0; padding:0;
     font-family: 'Amiri', serif;
     background: linear-gradient(135deg,#f5f3ec,#eae2d6);
     color:#333;
 }
+
 header {
     text-align:center;
     padding:30px 20px;
@@ -22,6 +29,7 @@ header {
     font-weight:bold;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
+
 .container {
     max-width:700px;
     margin:30px auto;
@@ -30,6 +38,7 @@ header {
     border-radius:25px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+
 .prayer-list div {
     display:flex;
     justify-content:space-between;
@@ -42,9 +51,11 @@ header {
     font-size:20px;
     font-weight:bold;
 }
+
 .prayer-list div span:first-child {
     color:#8b4513;
 }
+
 .countdown {
     text-align:center;
     margin-top:25px;
@@ -52,10 +63,11 @@ header {
     font-weight:bold;
     color:#d84315;
 }
+
 .moon-icon {
     font-size:36px; margin-left:10px; color:#ffb300;
 }
-    
+
 /* القائمة الجانبية (الأزرار) */
 nav {
     margin: 30px auto;
@@ -84,34 +96,53 @@ nav a:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
 }
+
+footer {
+    text-align:center;
+    padding:15px;
+    margin-top:30px;
+    color:#555;
+    font-size:14px;
+}
 </style>
 </head>
 <body>
 
 <header>
-🕌 مواقيت الصلاة – رمضان كريم <span class="moon-icon">🌙</span>
+🕌 مواقيت الصلاة - حسب التوقيت المحلي لمدينة القاهرة - رمضان كريم <span class="moon-icon">🌙</span>
 </header>
 
 <nav>
     <a href="duas.html">🤲 الأدعية</a>
     <a href="hadith.html">📜 الأحاديث</a>
     <a href="azkar.html">📿 الأذكار</a>
-    <a href="asmaa.html">✨ أسماء الله</a>
-    <a href="sebha.html"> السبحه الالكترونيه </a> 
-    <a herf="cards.html"> اصنع صوره دينيه </a> 
+    <a href="asmaa.html">✨ أسماء الله الحسنى </a>
+    <a href="sebha.html"> السبحة الإلكترونية </a> 
+    <a href="cards.html"> اصنع صورة دينية </a> 
     <a href="werd.html">📖 الوِرد اليومي</a>
-    <a herf= "mm.html"> من فضلك يرجي الاتصال بالإنترنت عند التعامل مع هذه الصفحه لضمان تحديث التوقيت </a> 
+    <a herf="mm.html">🔗 تحديث التوقيت يتطلب الإنترنت</a> 
     <a href="moshaf.html"> المصحف الشريف </a> 
-<a href="index.html"> الصفحه الرئيسيه </a> 
+    <a href="index.html"> الصفحة الرئيسية </a> 
 </nav>
+
 <div class="container">
     <div class="prayer-list" id="prayerList"></div>
     <div class="countdown" id="nextPrayer"></div>
 </div>
 
 <script>
-const apiURL = "https://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&method=8";
+const apiURL = "https://api.aladhan.com/v1/timingsByCity?city=Cairo&country=Egypt&method=5";
 let prayerTimes = {};
+
+// أسماء الصلاة بالعربي
+const names = {
+    Fajr:"الفجر",
+    Sunrise:"الشروق",
+    Dhuhr:"الظهر",
+    Asr:"العصر",
+    Maghrib:"المغرب",
+    Isha:"العشاء"
+};
 
 // جلب المواعيد
 fetch(apiURL)
@@ -128,18 +159,10 @@ fetch(apiURL)
     console.error(err);
 });
 
-// عرض الأوقات
+// عرض أوقات الصلاة
 function displayPrayerTimes(times){
     const container = document.getElementById('prayerList');
     container.innerHTML = "";
-    const names = {
-        Fajr:"الفجر",
-        Sunrise:"الشروق",
-        Dhuhr:"الظهر",
-        Asr:"العصر",
-        Maghrib:"المغرب",
-        Isha:"العشاء"
-    };
     for(let key in names){
         const time = times[key];
         const div = document.createElement('div');
@@ -150,6 +173,7 @@ function displayPrayerTimes(times){
 
 // العد التنازلي للصلاة القادمة
 function startCountdown(times){
+    function pad(n){ return n.toString().padStart(2,"0"); }
     function update(){
         const now = new Date();
         const formatTime = t=>{
@@ -163,14 +187,14 @@ function startCountdown(times){
             const prayerDate = formatTime(times[key]);
             if(prayerDate>now){
                 nextTime=prayerDate;
-                nextName=key;
+                nextName=names[key];
                 break;
             }
         }
         if(!nextTime){
             nextTime=formatTime(times["Fajr"]);
             nextTime.setDate(nextTime.getDate()+1);
-            nextName="الفجر";
+            nextName=names["Fajr"];
         }
 
         const diff=nextTime-now;
@@ -179,15 +203,15 @@ function startCountdown(times){
         const secs=Math.floor((diff/1000)%60);
 
         document.getElementById('nextPrayer').innerText =
-            `⏳ الصلاة القادمة (${nextName}): ${hrs}س ${mins}د ${secs}ث`;
+            `⏳ الصلاة القادمة (${nextName}): ${pad(hrs)}س ${pad(mins)}د ${pad(secs)}ث`;
     }
 
     update();
     setInterval(update,1000);
 }
+</script>
 
-    </script>
+<footer> جميع الحقوق محفوظة Mostafa Abdel Tawap © 2026</footer>
 
-    <footer> جميع الحقوق محفوظه mostafa abdel tawap  © 2026</footer>
 </body>
 </html>
