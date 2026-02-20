@@ -1,161 +1,169 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>السبحة الإسلامية العالمية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-gold: #D4AF37;
-            --deep-emerald: #013220;
-            --soft-gold: #fcf4d9;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>السبحة الإسلامية العالمية</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-gold: #FFD700;
+        --emerald-green: #046307;
+        --soft-beige: #fff8dc;
+        --btn-gradient-start: #0b3d0b;
+        --btn-gradient-end: #013220;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(circle, #024b30 0%, #013220 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Cairo', sans-serif;
-            overflow: hidden;
-        }
+    body {
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle, #0a4d20 0%, #013220 100%);
+        font-family: 'Cairo', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        overflow-x: hidden;
+        color: var(--soft-beige);
+    }
 
-        /* الخلفية الزخرفية */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
-            opacity: 0.15;
-            pointer-events: none;
-        }
+    body::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
+        opacity: 0.1;
+        pointer-events: none;
+    }
 
-        .tasbeeh-wrapper {
-            position: relative;
-            text-align: center;
-            background: rgba(1, 50, 32, 0.8);
-            padding: 40px;
-            border: 2px solid var(--primary-gold);
-            border-radius: 50px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(212, 175, 55, 0.2);
-            backdrop-filter: blur(10px);
-            width: 350px;
-        }
+    nav {
+        width: 100%;
+        padding: 10px 0;
+        background: rgba(1,50,32,0.9);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    }
 
-        .islamic-pattern {
-            font-family: 'Amiri', serif;
-            color: var(--primary-gold);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
+    nav a {
+        padding: 10px 20px;
+        background: var(--soft-beige);
+        color: var(--emerald-green);
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        border: 2px solid var(--primary-gold);
+    }
 
-        .display-screen {
-            background: #002215;
-            border: 1px solid var(--primary-gold);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,1);
-        }
+    nav a:hover {
+        background: var(--primary-gold);
+        color: var(--emerald-green);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
 
-        #counter {
-            font-family: 'Amiri', serif;
-            font-size: 4rem;
-            color: var(--primary-gold);
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-            margin: 0;
-        }
+    .tasbeeh-wrapper {
+        margin-top: 30px;
+        text-align: center;
+        background: rgba(4, 50, 25, 0.85);
+        padding: 50px;
+        border-radius: 40px;
+        box-shadow: 0 0 50px rgba(0,0,0,0.6), inset 0 0 25px rgba(255,215,0,0.2);
+        backdrop-filter: blur(10px);
+        width: 360px;
+    }
 
-        #zikr-text {
-            color: var(--soft-gold);
-            font-size: 1.2rem;
-            margin-top: 10px;
-            min-height: 30px;
-        }
+    .islamic-pattern {
+        font-family: 'Amiri', serif;
+        color: var(--primary-gold);
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
 
-        .main-button {
-            width: 160px;
-            height: 160px;
-            background: linear-gradient(145deg, #01412a, #012a1b);
-            border: 5px solid var(--primary-gold);
-            border-radius: 50%;
-            cursor: pointer;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-            transition: all 0.1s;
-            position: relative;
-        }
+    .display-screen {
+        background: #001a0f;
+        border: 1px solid var(--primary-gold);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 35px;
+        box-shadow: inset 0 0 20px rgba(0,0,0,1);
+    }
 
-        .main-button:active {
-            transform: scale(0.92);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.6);
-        }
+    #counter {
+        font-family: 'Amiri', serif;
+        font-size: 4.5rem;
+        color: var(--primary-gold);
+        text-shadow: 0 0 15px rgba(255,215,0,0.7);
+        margin: 0;
+    }
 
-        .main-button::after {
-            content: "✨";
-            color: var(--primary-gold);
-            font-size: 2rem;
-        }
+    #zikr-text {
+        font-size: 1.3rem;
+        margin-top: 10px;
+        min-height: 30px;
+    }
 
-        .tools {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-        }
+    .main-button {
+        width: 170px;
+        height: 170px;
+        background: linear-gradient(145deg, var(--btn-gradient-start), var(--btn-gradient-end));
+        border: 5px solid var(--primary-gold);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        cursor: pointer;
+        font-size: 2.2rem;
+        color: var(--primary-gold);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        transition: all 0.1s;
+        position: relative;
+    }
 
-        .tool-btn {
-            background: transparent;
-            border: 1px solid var(--primary-gold);
-            color: var(--primary-gold);
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: 0.3s;
-        }
+    .main-button:active {
+        transform: scale(0.92);
+        box-shadow: 0 0 25px var(--primary-gold), 0 0 50px var(--soft-beige);
+        animation: glow 0.3s ease-in-out;
+    }
 
-        .tool-btn:hover {
-            background: var(--primary-gold);
-            color: var(--deep-emerald);
-        }
+    @keyframes glow {
+        0% { box-shadow: 0 0 25px var(--primary-gold); }
+        50% { box-shadow: 0 0 50px var(--soft-beige); }
+        100% { box-shadow: 0 0 25px var(--primary-gold); }
+    }
 
-/* القائمة الجانبية (الأزرار) */
-nav {
-    margin: 30px auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: center;
-    max-width: 1000px;
-}
+    .tools {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
 
-nav a {
-    padding: 10px 25px;
-    background: white;
-    color: var(--main-blue);
-    text-decoration: none;
-    border: 2px solid var(--gold);
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 17px;
-    transition: all 0.4s ease;
-}
+    .tool-btn {
+        background: transparent;
+        border: 1px solid var(--primary-gold);
+        color: var(--primary-gold);
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: 0.3s;
+    }
 
-nav a:hover {
-    background: var(--gold);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
-}
-    </style>
+    .tool-btn:hover {
+        background: var(--primary-gold);
+        color: var(--emerald-green);
+    }
+</style>
 </head>
 <body>
 
@@ -165,69 +173,93 @@ nav a:hover {
     <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
     <a href="azkar.html">📿 الأذكار</a>
     <a href="asmaa.html">✨ أسماء الله</a>
-    <a herf="cards.html"> اصنع صوره دينيه </a> 
+    <a href="cards.html">اصنع صوره دينيه</a>
     <a href="werd.html">📖 الوِرد اليومي</a>
-    <a href="moshaf.html"> المصحف الشريف </a> 
-<a href="index.html"> الصفحه الرئيسيه </a> 
+    <a href="moshaf.html">المصحف الشريف</a>
+    <a href="index.html">الصفحه الرئيسيه</a>
 </nav>
-    <div class="tasbeeh-wrapper">
-        <div class="islamic-pattern">﷽</div>
-        
-        <div class="display-screen">
-            <h1 id="counter">0</h1>
-            <div id="zikr-text">سبحان الله</div>
-        </div>
 
-        <div class="main-button" id="tap-zone" onclick="app.increment()"></div>
-
-        <div class="tools">
-            <button class="tool-btn" onclick="app.reset()">تصفير العداد</button>
-            <button class="tool-btn" onclick="app.changeZikr()">تغيير الذكر</button>
-        </div>
+<div class="tasbeeh-wrapper">
+    <div class="islamic-pattern">﷽</div>
+    
+    <div class="display-screen">
+        <h1 id="counter">0</h1>
+        <div id="zikr-text">سبحان الله</div>
     </div>
 
-    <script>
-        // برمجة كائنية التوجه - أسلوب المحترفين (Module Pattern)
-        const app = (() => {
-            // بيانات الحالة (State)
-            let state = {
-                count: parseInt(localStorage.getItem('islamic_count')) || 0,
-                zikrIndex: 0,
-                azkar: ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله العظيم"]
-            };
+    <div class="main-button" id="tap-zone" onclick="app.increment()">✨</div>
 
-            // عناصر الواجهة (UI Elements)
-            const elCounter = document.getElementById('counter');
-            const elZikr = document.getElementById('zikr-text');
+    <div class="tools">
+        <button class="tool-btn" onclick="app.reset()">تصفير العداد</button>
+        <button class="tool-btn" onclick="app.changeZikr()">تغيير الذكر</button>
+        <button class="tool-btn" onclick="app.setTotalCount()">تحديد عدد الذكر</button>
+        <button class="tool-btn" onclick="app.shareCount()">شارك نتيجتك</button>
+    </div>
+</div>
 
-            // تحديث الواجهة
-            const updateUI = () => {
-                elCounter.innerText = state.count.toLocaleString('ar-EG'); // عرض الأرقام بالعربية
-                elZikr.innerText = state.azkar[state.zikrIndex];
-                localStorage.setItem('islamic_count', state.count);
-            };
+<script>
+const app = (() => {
+    let state = {
+        count: parseInt(localStorage.getItem('islamic_count')) || 0,
+        zikrIndex: 0,
+        azkar: ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله العظيم"],
+        totalCount: 33
+    };
 
-            // تهيئة التطبيق
+    const clickSound = new Audio('https://freesound.org/data/previews/256/256113_3263906-lq.mp3');
+
+    const elCounter = document.getElementById('counter');
+    const elZikr = document.getElementById('zikr-text');
+
+    const updateUI = () => {
+        elCounter.innerText = state.count.toLocaleString('ar-EG');
+        elZikr.innerText = state.azkar[state.zikrIndex];
+        localStorage.setItem('islamic_count', state.count);
+    };
+
+    updateUI();
+
+    return {
+        increment: () => {
+            state.count++;
+            clickSound.play();
+            if(state.totalCount && state.count % state.totalCount === 0){
+                app.changeZikr();
+                alert("تم إتمام دورة من الذكر!");
+            }
             updateUI();
+            if (navigator.vibrate) navigator.vibrate(30);
+        },
+        reset: () => {
+            if (confirm("هل تريد البدء من جديد؟")) {
+                state.count = 0;
+                updateUI();
+            }
+        },
+        changeZikr: () => {
+            state.zikrIndex = (state.zikrIndex + 1) % state.azkar.length;
+            updateUI();
+        },
+        setTotalCount: () => {
+            let input = prompt("اختر عدد مرات الذكر أي قيمة:", state.totalCount);
+            let val = parseInt(input);
+            if(val > 0) state.totalCount = val;
+            else alert("العدد غير صحيح، سيتم استخدام العدد الافتراضي.");
+        },
+        shareCount: () => {
+            if(navigator.share){
+                navigator.share({
+                    title: 'سبحتي الرقمية',
+                    text: `عدد أذكاري اليوم: ${state.count} ✨`,
+                    url: window.location.href
+                });
+            } else {
+                alert(`عدد أذكاري اليوم: ${state.count}`);
+            }
+        }
+    };
+})();
+</script>
 
-            return {
-                increment: () => {
-                    state.count++;
-                    updateUI();
-                    if (navigator.vibrate) navigator.vibrate(30); // اهتزاز بسيط
-                },
-                reset: () => {
-                    if (confirm("هل تريد البدء من جديد؟")) {
-                        state.count = 0;
-                        updateUI();
-                    }
-                },
-                changeZikr: () => {
-                    state.zikrIndex = (state.zikrIndex + 1) % state.azkar.length;
-                    updateUI();
-                }
-            };
-        })();
-    </script>
 </body>
 </html>
