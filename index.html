@@ -258,6 +258,8 @@ footer strong { color: var(--gold); }
 </nav>
 <!-- قسم المربعات الديناميكية -->
 <section class="daily-cards">
+  <div class="card" id
+    <section class="daily-cards">
   <div class="card" id="hadith-card">
     <h3>📜 حديث اليوم</h3>
     <p id="hadith-text">جاري التحميل...</p>
@@ -272,75 +274,49 @@ footer strong { color: var(--gold); }
   </div>
 </section>
 
-<style>
-.daily-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  max-width: 1000px;
-  margin: 40px auto;
-}
-
-/* المربعات */
-.card {
-  flex: 1 1 300px; /* كل مربع ياخد نفس الحجم تقريبًا */
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  transition: all 0.3s ease;
-  min-height: 180px;
-  text-align: center;
-}
-.card h3 {
-  font-family: 'Aref Ruqaa', serif;
-  color: var(--main-blue);
-  margin-bottom: 15px;
-}
-.card p {
-  font-size: 17px;
-  line-height: 1.8;
-  color: #555;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-}
-
-/* Responsive: تحت بعض على الموبايل */
-@media (max-width: 768px) {
-  .daily-cards {
-    flex-direction: column;
-    gap: 15px;
-  }
-}
-</style>
-
 <script>
-// تحميل المحتوى الديناميكي
-async function fetchText(url, elementId) {
+async function fetchFromHTML(url, elementId, contentId) {
   try {
     const res = await fetch(url);
     const html = await res.text();
-
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    // جلب أول فقرة <p> كمثال
-    const textElement = doc.querySelector('p');
-    document.getElementById(elementId).innerText = textElement ? textElement.innerText : 'لا توجد بيانات اليوم';
-  } catch (err) {
-    console.error('خطأ في التحميل من', url, err);
+    // نجيب كل العناصر داخل div محدد
+    const content = doc.querySelector('#' + contentId);
+    if(!content) throw 'div غير موجود';
+
+    const items = Array.from(content.querySelectorAll('p')).map(p => p.innerText.trim());
+    if(items.length === 0) throw 'لا توجد فقرات';
+
+    // حساب اليوم الحالي
+    const todayIndex = Math.floor(new Date().setHours(0,0,0,0) / (1000*60*60*24)) % items.length;
+    document.getElementById(elementId).innerText = items[todayIndex];
+  } catch(err) {
+    console.error('خطأ في', url, err);
     document.getElementById(elementId).innerText = 'فشل تحميل المحتوى';
   }
 }
 
 // تحميل عند فتح الصفحة
-fetchText('hadith.html', 'hadith-text');
-fetchText('duas.html', 'dua-text');
-fetchText('werd.html', 'werd-text');
+fetchFromHTML('hadith.html', 'hadith-text', 'hadith-content');
+fetchFromHTML('duas.html', 'dua-text', 'duas-content');
+fetchFromHTML('werd.html', 'werd-text', 'werd-content');
+
+// جدولة التحديث اليومي عند الساعة 00:00
+function scheduleNextUpdate() {
+  const now = new Date();
+  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+  const msUntilMidnight = nextMidnight - now;
+
+  setTimeout(() => {
+    fetchFromHTML('hadith.html', 'hadith-text', 'hadith-content');
+    fetchFromHTML('duas.html', 'dua-text', 'duas-content');
+    fetchFromHTML('werd.html', 'werd-text', 'werd-content');
+    scheduleNextUpdate(); // جدولة اليوم التالي
+  }, msUntilMidnight);
+}
+scheduleNextUpdate();
 </script>
 <main>
   <h2>أهلاً بك في رحاب الطاعة</h2>
