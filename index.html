@@ -257,67 +257,7 @@ footer strong { color: var(--gold); }
   <a href="contact.html">الاقتراحات والشكاوى</a>
 </nav>
 <!-- قسم المربعات الديناميكية -->
-<section class="daily-cards">
-  <div class="card" id
-    <section class="daily-cards">
-  <div class="card" id="hadith-card">
-    <h3>📜 حديث اليوم</h3>
-    <p id="hadith-text">جاري التحميل...</p>
-  </div>
-  <div class="card" id="dua-card">
-    <h3>🤲 دعاء اليوم</h3>
-    <p id="dua-text">جاري التحميل...</p>
-  </div>
-  <div class="card" id="werd-card">
-    <h3>📖 ورد اليوم</h3>
-    <p id="werd-text">جاري التحميل...</p>
-  </div>
-</section>
 
-<script>
-async function fetchFromHTML(url, elementId, contentId) {
-  try {
-    const res = await fetch(url);
-    const html = await res.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    // نجيب كل العناصر داخل div محدد
-    const content = doc.querySelector('#' + contentId);
-    if(!content) throw 'div غير موجود';
-
-    const items = Array.from(content.querySelectorAll('p')).map(p => p.innerText.trim());
-    if(items.length === 0) throw 'لا توجد فقرات';
-
-    // حساب اليوم الحالي
-    const todayIndex = Math.floor(new Date().setHours(0,0,0,0) / (1000*60*60*24)) % items.length;
-    document.getElementById(elementId).innerText = items[todayIndex];
-  } catch(err) {
-    console.error('خطأ في', url, err);
-    document.getElementById(elementId).innerText = 'فشل تحميل المحتوى';
-  }
-}
-
-// تحميل عند فتح الصفحة
-fetchFromHTML('hadith.html', 'hadith-text', 'hadith-content');
-fetchFromHTML('duas.html', 'dua-text', 'duas-content');
-fetchFromHTML('werd.html', 'werd-text', 'werd-content');
-
-// جدولة التحديث اليومي عند الساعة 00:00
-function scheduleNextUpdate() {
-  const now = new Date();
-  const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-  const msUntilMidnight = nextMidnight - now;
-
-  setTimeout(() => {
-    fetchFromHTML('hadith.html', 'hadith-text', 'hadith-content');
-    fetchFromHTML('duas.html', 'dua-text', 'duas-content');
-    fetchFromHTML('werd.html', 'werd-text', 'werd-content');
-    scheduleNextUpdate(); // جدولة اليوم التالي
-  }, msUntilMidnight);
-}
-scheduleNextUpdate();
-</script>
 <main>
   <h2>أهلاً بك في رحاب الطاعة</h2>
   <p>
