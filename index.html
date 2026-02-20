@@ -1,266 +1,253 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<meta name="theme-color" content="#1a3a5f">
+ <link rel="manifest" href="manifest.json">
+
+<meta name="description" content="موقع روضة الذكر: أذكار، أدعية، أحاديث، القرآن الكريم، سبحة إلكترونية، كل ما تحتاجه من ذكر وعبادة يومية.">
+<meta name="keywords" content="أذكار, أدعية, دعاء, أحاديث, سبحة, سبحة إلكترونية, قرآن, قرآن كريم, ورد يومي, أذكار الصباح, أذكار المساء">
+ <meta name="google-site-verification" content="HZGFIJOEiTkA6qRJ5p4uaaaEs3I2AQriM5GtiqrNQ1Y" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1a3a5f">
-<link rel="manifest" href="manifest.json">
-<title>❤️ روضة الذكر و نبض القرآن الكريم</title>
+<title> ❤️روضة الذكر و نبض القرأن الكريم</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap');
 
-<meta name="description" content="موقع روضة الذكر: أذكار، أدعية، أحاديث، القرآن الكريم، سبحة إلكترونية، كل ما تحتاجه من ذكر وعبادة يومية في رمضان.">
-<meta name="keywords" content="أذكار, أدعية, دعاء, أحاديث, سبحة, سبحة إلكترونية, قرآن, قرآن كريم, ورد يومي, أذكار الصباح, أذكار المساء, رمضان, شهر رمضان">
-<meta name="robots" content="index, follow">
-<meta name="google-site-verification" content="HZGFIJOEiTkA6qRJ5p4uaaaEs3I2AQriM5GtiqrNQ1Y" />
-
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
-
-<!-- SEO Structured Data -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "روضة الذكر و نبض القرآن الكريم",
-  "url": "https://example.com",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://example.com/?s={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+:root {
+    --main-blue: #1a3a5f;
+    --gold: #c5a059;
+    --light-gold: #f4e1bc;
+    --bg-white: #fdfbf7;
+    --text-gray: #444;
 }
-</script>
 
-<!-- Google Analytics -->
+body {
+    margin:0; padding:0;
+    font-family: 'Amiri', serif;
+    background-color: var(--bg-white);
+    background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); /* زخرفة إسلامية خفيفة */
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    color: var(--text-gray);
+}
+
+/* الهيدر الاحترافي */
+header {
+    background: var(--main-blue);
+    color: var(--gold);
+    width: 100%;
+    text-align: center;
+    padding: 40px 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border-bottom: 4px solid var(--gold);
+}
+
+header h1 {
+    font-family: 'Aref Ruqaa', serif;
+    margin: 0;
+    font-size: 36px;
+    letter-spacing: 1px;
+}
+
+/* القائمة الجانبية (الأزرار) */
+nav {
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 1000px;
+}
+
+nav a {
+    padding: 10px 25px;
+    background: white;
+    color: var(--main-blue);
+    text-decoration: none;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 17px;
+    transition: all 0.4s ease;
+}
+
+nav a:hover {
+    background: var(--gold);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
+}
+
+/* منطقة المحتوى */
+main {
+    max-width: 900px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    text-align: center;
+    position: relative;
+}
+
+main::before {
+    content: "❁";
+    color: var(--gold);
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+main h2 {
+    font-family: 'Aref Ruqaa', serif;
+    font-size: 30px;
+    color: var(--main-blue);
+    margin-bottom: 20px;
+}
+
+main p {
+    font-size: 20px;
+    line-height: 2;
+    color: #555;
+}
+
+/* صورة جمالية */
+.hero-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 30px 0;
+    border-radius: 15px;
+    border: 5px double var(--gold);
+}
+
+/* الفوتر */
+footer {
+    margin-top: auto;
+    padding: 20px 0;
+    text-align: center;
+    background: var(--main-blue);
+    color: #ccc;
+    font-size: 14px;
+    border-top: 3px solid var(--gold);
+}
+
+footer strong {
+    color: var(--gold);
+}
+
+/* تحسين للجوال */
+@media (max-width: 600px) {
+    header h1 { font-size: 24px; }
+    main { padding: 20px; }
+    nav a { width: 40%; text-align: center; font-size: 14px; }
+}
+ .ramadan-card {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* ألوان الغسق الرمضاني */
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 20px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    overflow: hidden;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.content {
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.4); /* خلفية شفافة لإبراز النص */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.crescent {
+    font-size: 50px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fdbb2d; /* لون ذهبي */
+}
+
+.greeting-text {
+    line-height: 1.8;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.signature {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #fff;
+    border-top: 2px solid #fdbb2d;
+    display: inline-block;
+    padding-top: 10px;
+}
+
+</style>
+    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YYC3GMZEED"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+
   gtag('config', 'G-YYC3GMZEED');
 </script>
-
-<style>
-:root {
-  --main-blue: #1a3a5f;
-  --gold: #c5a059;
-  --light-gold: #f4e1bc;
-  --bg-white: #fdfbf7;
-  --text-gray: #444;
-  --transition-speed: 0.4s;
-}
-
-body {
-  margin:0; padding:0;
-  font-family: 'Amiri', serif;
-  background-color: var(--bg-white);
-  background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  color: var(--text-gray);
-}
-
-/* Header */
-header {
-  background: var(--main-blue);
-  color: var(--gold);
-  width: 100%;
-  text-align: center;
-  padding: 40px 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  border-bottom: 4px solid var(--gold);
-}
-header h1 {
-  font-family: 'Aref Ruqaa', serif;
-  margin:0;
-  font-size: 36px;
-  letter-spacing: 1px;
-}
-
-/* Main Navigation - Desktop */
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap:12px;
-  max-width: 1000px;
-  margin:30px auto;
-}
-nav a {
-  padding: 10px 25px;
-  background: white;
-  color: var(--main-blue);
-  text-decoration: none;
-  border: 2px solid var(--gold);
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 17px;
-  transition: all var(--transition-speed) ease;
-}
-nav a:hover {
-  background: var(--gold);
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(197,160,89,0.4);
-}
-
-/* Hamburger menu for mobile */
-.menu-toggle {
-  display: none;
-  position: fixed;
-  top: 25px;
-  right: 20px;
-  background: var(--gold);
-  color: var(--main-blue);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 28px;
-  text-align: center;
-  line-height: 50px;
-  cursor: pointer;
-  z-index: 999;
-}
-@media (max-width: 768px) {
-  nav {
-    display: none;
-    flex-direction: column;
-    background: var(--bg-white);
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 220px;
-    height: 100%;
-    padding-top: 100px;
-    box-shadow: -3px 0 15px rgba(0,0,0,0.2);
-    z-index: 998;
-  }
-  nav a { width: 80%; margin:10px auto; text-align:center; }
-  .menu-toggle { display: block; }
-}
-
-/* Main Content */
-main {
-  max-width: 900px;
-  width: 90%;
-  margin: 20px auto;
-  padding: 40px;
-  background: white;
-  border-radius: 15px;
-  border: 1px solid #eee;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-  text-align: center;
-  position: relative;
-}
-main::before {
-  content:"❁";
-  color: var(--gold);
-  font-size:40px;
-  display:block;
-  margin-bottom:10px;
-}
-main h2 {
-  font-family: 'Aref Ruqaa', serif;
-  font-size: 30px;
-  color: var(--main-blue);
-  margin-bottom: 20px;
-}
-main p {
-  font-size:20px;
-  line-height:2;
-  color:#555;
-}
-.hero-img {
-  width:100%;
-  max-width:500px;
-  height:auto;
-  margin:30px 0;
-  border-radius:15px;
-  border:5px double var(--gold);
-}
-
-/* Ramadan Card */
-.ramadan-card {
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-  height:400px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  border-radius:20px;
-  color:white;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  direction: rtl;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-  overflow:hidden;
-  margin: 20px auto;
-  max-width:600px;
-}
-.ramadan-card .content {
-  padding:30px;
-  background: rgba(0,0,0,0.4);
-  border-radius:15px;
-  border:1px solid rgba(255,255,255,0.2);
-}
-.crescent { font-size:50px; display:block; margin-bottom:10px; }
-.ramadan-card h1 { font-size:2.5rem; margin-bottom:20px; color:#fdbb2d; }
-.greeting-text { line-height:1.8; font-size:1.2rem; margin-bottom:25px; }
-.signature { font-weight:bold; font-size:1.5rem; color:#fff; border-top:2px solid #fdbb2d; display:inline-block; padding-top:10px; }
-
-/* Footer */
-footer {
-  margin-top:auto;
-  padding:20px 0;
-  text-align:center;
-  background: var(--main-blue);
-  color:#ccc;
-  font-size:14px;
-  border-top:3px solid var(--gold);
-}
-footer strong { color: var(--gold); }
-</style>
 </head>
 <body>
 
 <header>
-  <h1>اللهم انت السلام و منك السلام تباركت يا ذا الجلال والاكرام</h1>
+    <h1>اللهم انت السلام و منك السلام تباركت يا ذا الجلال والاكرام </h1>
 </header>
-
 <div class="ramadan-card">
-  <div class="overlay">
-    <div class="content">
-      <span class="crescent">🌙</span>
-      <h1>مبارك عليكم شهر رمضان</h1>
-      <p class="greeting-text">
-        بمناسبة حلول شهر رمضان المبارك، نرفع إليكم أسمى آيات التهاني والتبريكات، سائلين المولى عز وجل أن يجعله شهر خير وبركة، وأن يعينكم على صيامه وقيامه، وأن يتقبل منكم صالح الأعمال.
-      </p>
-      <div class="signature">كل عام وأنتم بخير</div>
+    <div class="overlay">
+        <div class="content">
+            <span class="crescent">🌙</span>
+            <h1>مبارك عليكم شهر رمضان</h1>
+            <p class="greeting-text">
+                بمناسبة حلول شهر رمضان المبارك، نرفع إليكم أسمى آيات التهاني والتبريكات، 
+                سائلين المولى عز وجل أن يجعله شهر خير وبركة، وأن يعينكم على صيامه وقيامه، 
+                وأن يتقبل منكم صالح الأعمال.
+            </p>
+            <div class="signature">كل عام وأنتم بخير</div>
+        </div>
     </div>
-  </div>
 </div>
 
-<div class="menu-toggle">☰</div>
 <nav>
-  <a href="duas.html">🤲 الأدعية</a>
-  <a href="hadith.html">📜 الأحاديث</a>
-  <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
-  <a href="azkar.html">📿 الأذكار</a>
-  <a href="asmaa.html">✨ أسماء الله</a>
-  <a href="sebha.html">السبحة الإلكترونية</a>
-  <a href="cards.html">اصنع صورة دينية</a>
-  <a href="moshaf.html">المصحف الشريف</a>
-  <a href="index.html">الصفحة الرئيسية</a>
-  <a href="werd.html">📖 الوِرد اليومي</a>
-  <a href="quiz.html">اختبر نفسك 🤝</a>
-  <a href="Mo.html">المصحف الشريف(بدون نت)</a>
-  <a href="kp.html">كيف تستفيد من شهر رمضان</a>
-  <a href="contact.html">الاقتراحات والشكاوى</a>
+    <a href="duas.html">🤲 الأدعية</a>
+    <a href="hadith.html">📜 الأحاديث</a>
+    <a href="prayer-times.html">🕌 مواقيت الصلاة</a>
+    <a href="azkar.html">📿 الأذكار</a>
+    <a href="asmaa.html">✨ أسماء الله</a>
+    <a href="sebha.html"> السبحه الالكترونيه </a> 
+    <a href="cards.html"> اصنع صوره دينيه </a> 
+   <a href="moshaf.html"> المصحف الشريف </a> 
+<a href="index.html"> الصفحه الرئيسيه </a> 
+ <a href="werd.html">📖 الوِرد اليومي</a>
+ <a href="quiz.html"> اختبر نفسك 🤝</a> 
+ <a href="Mo.html"> المصحف الشريف(بدون نت ) </a> 
+ <a href="kp.html"> كيف تستفيد من شهر رمضان </a> 
+ <a href="contact.html"> الاقتراحات والشكاوي </a> 
 </nav>
-<!-- قسم المربعات الديناميكية -->
 
 <main>
-  <h2>أهلاً بك في رحاب الطاعة</h2>
-  <p>
+    <h2>اهلا و مرحبا بكم في روضة الذكر ونبض القرأن الكريم </h2>
+    
+ <p>
 مرحبًا بك في رحاب الطمأنينة، وفي روضةٍ من رياض الذكر تتنزّل فيها السكينة، وتشرق فيها أنوار القرآن. هنا تبدأ رحلتك الإيمانية في شهر رمضان المبارك، الشهر الذي تُفتح فيه أبواب الرحمة، وتُضاعف فيه الحسنات، وتسمو فيه الأرواح طلبًا لرضا الله.  
 لقد صُمّم هذا الموقع ليكون محرابًا رقميًا يجمع لك نفحات الإيمان في مكانٍ واحد، وليكون رفيقك اليومي في مسيرة الطاعة والالتزام. بين صفحاته تجد الأذكار الجامعة، والأدعية المأثورة، والأحاديث النبوية الشريفة، ووِردك اليومي المنظّم، وكل ما يعينك على الثبات والمداومة وحضور القلب.
 </p>
@@ -277,17 +264,15 @@ footer strong { color: var(--gold); }
 اللهم اغفر له وارحمه، وعافه واعف عنه، وأكرم نزله ووسع مدخله، واغسله بالماء والثلج والبرد، ونقّه من الخطايا كما ينقّى الثوب الأبيض من الدنس، وأبدله دارًا خيرًا من داره، وأهلاً خيرًا من أهله، وزوجًا خيرًا من زوجه، وأدخله الجنة بلا حساب، ووفقنا وإياه لصالح الأعمال، واجمعنا معه في الفردوس الأعلى. آمين.
 </p>
     
-  
-  <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da" alt="صورة رمضانية" class="hero-img">
-  <p style="font-style: italic; color: #888;">"إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ كَانَتْ لَهُمْ جَنَّاتُ الْفِرْدَوْسِ نُزُلًا"</p>
+    <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da" alt="صورة رمضانية" class="hero-img">
+    
+    <p style="font-style: italic; color: #888;">"إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ كَانَتْ لَهُمْ جَنَّاتُ الْفِرْدَوْسِ نُزُلًا"</p>
 </main>
 
 <footer>
-  جميع الحقوق محفوظة © 2026 - صُمم بواسطة <strong>مصطفى عبد التواب</strong>
+    جميع الحقوق محفوظة © 2026 - صُمم بواسطة <strong>مصطفى عبد التواب</strong>
 </footer>
-
 <script>
-/* PWA Service Worker */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
@@ -295,13 +280,6 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log("خطأ في التسجيل:", err));
   });
 }
-
-/* Toggle Mobile Menu */
-const menuToggle = document.querySelector('.menu-toggle');
-const nav = document.querySelector('nav');
-menuToggle.addEventListener('click', () => {
-  nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-});
 </script>
 </body>
 </html>
